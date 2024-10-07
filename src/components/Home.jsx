@@ -27,9 +27,11 @@ const Home = () => {
           <button onClick={toggleForm} className={isLogin ? 'inactive' : 'active'}>
             Sign up
           </button>
+          
           <button onClick={toggleForm} className={isLogin ? 'active' : 'inactive'}>
             Login
           </button>
+          <p>click on login</p>
         </div>
 
         {!isLogin ? (
@@ -41,9 +43,11 @@ const Home = () => {
             <button type="submit">Submit</button>
           </form>
         ) : (
+          
           <form className="form" onSubmit={handleLogin}>
             <input type="text" placeholder="Username" />
             <input type="password" placeholder="Password" />
+            <p>click on login</p>
             <button type="submit">Login</button>
           </form>
         )}
