@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Base from './Base';
 import '../CSS/User.css';
 import DP from '../assets/images/DP.jpg';
 import hunger from '../assets/images/hunger.jpg';
-import { useNavigate } from 'react-router-dom';
+
 const UserDash = () => {
   const [currentSection, setCurrentSection] = useState('hunger');
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      const userData = JSON.parse(storedUser);
+      setUsername(userData.username || 'Guest');
+    } else {
+      setUsername('Guest');
+    }
+  }, []);
+  
 
   const posts = [
     { id: 1, username: 'Sathwik Reddy', text: "Hunger allows no Choice 😢", image: hunger, request: 'Need food for 5 people' },
-    // Add more posts if needed
   ];
 
   const toggleSection = (section) => {
@@ -18,6 +29,10 @@ const UserDash = () => {
 
   return (
     <Base toggleSection={toggleSection}>
+      <div className="user-header">
+        <h2>Welcome, {username}</h2>
+      </div>
+      
       {currentSection === 'hunger' ? (
         <div className="posts-section scrollable">
           {posts.map((post) => (
@@ -37,7 +52,6 @@ const UserDash = () => {
       ) : (
         <div className="offerings-section scrollable">
           <h2>Offerings</h2>
-          {/* Add offerings content */}
           <p>Offering 1: Surplus food available for donation.</p>
           <p>Offering 2: Food donation for 10 people.</p>
         </div>

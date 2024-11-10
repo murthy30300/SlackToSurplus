@@ -23,7 +23,22 @@ const Home = () => {
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
-
+  const handleLogout = async () => {
+    try {
+      // Send a request to the backend to invalidate the session
+      await axios.post('http://localhost:1987/logout', {}, { withCredentials: true });
+  
+      // Clear the user data from localStorage
+      localStorage.removeItem('user');
+  
+      // Optionally navigate back to the login or home page
+      navigate('/');
+      setMessage('Logged out successfully.');
+    } catch (error) {
+      console.error('Logout error:', error.response || error.message);
+      setMessage('Logout failed.');
+    }
+  };
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -33,16 +48,23 @@ const Home = () => {
           password: user.password,
         },
       });
-      if (response.status === 200) {
+  
+      if (response.status === 200 && response.data.username) {
         setMessage('Login successful');
+  
+        // Store the username in localStorage
+        localStorage.setItem('user', JSON.stringify({ username: response.data.username }));
+  
         navigate('/UserDash');
+      } else {
+        setMessage('Login failed. Please check your credentials.');
       }
     } catch (error) {
       console.error('Login error:', error.response || error.message);
       setMessage('Login failed. Please check your credentials.');
     }
   };
-
+  
   const handleSignup = async (e) => {
     e.preventDefault();
     try {

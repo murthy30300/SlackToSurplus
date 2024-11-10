@@ -9,7 +9,7 @@ import food3 from '../assets/svgs/food3.svg';
 import create from '../assets/svgs/create.svg';
 import User from '../assets/svgs/user.svg';
 import UserDash from './UserDash';
-
+import axios from 'axios';
 const Base = ({ children, toggleSection }) => {
   const navigate = useNavigate(); // Initialize the navigate hook
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
@@ -17,7 +17,16 @@ const Base = ({ children, toggleSection }) => {
   const [isChatModalOpen, setIsChatModalOpen] = useState(false); // State for chat modal visibility
   const [caption, setCaption] = useState('');
   const [media, setMedia] = useState(null);
-
+ 
+  const handleLogout = async () => {
+    try {
+      await axios.post('http://localhost:1987/logout', {}, { withCredentials: true });
+      localStorage.removeItem('user');
+      navigate('/');
+    } catch (error) {
+      console.error('Logout error:', error.response || error.message);
+    }
+  }
   // Function to handle modal opening
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -76,7 +85,7 @@ const Base = ({ children, toggleSection }) => {
             <button onClick={() => toggleSection('offering')} className="nav-btn">
               Offerings
             </button>
-            <button onClick={() => navigate('/')} className="logout-btn">
+            <button onClick={handleLogout}  className="logout-btn">
                 Logout
               </button>
             <div className="settings-icon">
@@ -159,62 +168,3 @@ export default Base;
 
 
 
-// import React from 'react';
-// import { useNavigate } from 'react-router-dom';  // Import the useNavigate hook
-// import '../CSS/Base.css';
-// import homeIcon from '../assets/svgs/homeIcon.svg';
-// import search from '../assets/svgs/search.svg';
-// import message from '../assets/svgs/message.svg';
-// import foodDonate from '../assets/svgs/foodDonate.svg';
-// import food3 from '../assets/svgs/food3.svg';
-// import create from '../assets/svgs/create.svg';
-
-// const Base = ({ children, toggleSection }) => {
-//   const navigate = useNavigate(); // Initialize the navigate hook
-
-//   return (
-//     <div className="base-container">
-//       {/* Sidebar */}
-//       <div className="sidebar">
-//         <div className="icons">
-//           <img src={homeIcon} alt="Home" onClick={() => navigate('/')} />
-//           <img src={search} alt="Search" />
-//           <img src={message} alt="Messages" />
-//           <img src={foodDonate} alt="Donate" onClick={() => navigate('/Donate')} />
-//           <img src={food3} alt="Food"  onClick={() => navigate('/Request')}/>
-//           <img src={create} alt="Create" onClick={()=> navigate('/Post')} />
-//         </div>
-//       </div>
-
-//       {/* Main content wrapper */}
-//       <div className="main-wrapper">
-//         {/* Main content area */}
-//         <div className="main-content">
-//           {/* Navbar */}
-//           <div className="navbar">
-//             <button onClick={() => toggleSection('hunger')} className="nav-btn">
-//               Hungers
-//             </button>
-//             <button onClick={() => toggleSection('offering')} className="nav-btn">
-//               Offerings
-//             </button>
-//             <div className="settings-icon">⚙️</div>
-//           </div>
-
-//           {/* Scrollable dynamic content */}
-//           <div className="scrollable-content">
-//             {children}
-//           </div>
-//         </div>
-
-//         {/* Articles section on the right */}
-//         <div className="articles-section">
-//           <h2>Articles</h2>
-//           <p>Some interesting articles related to food security and waste management.</p>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Base;
