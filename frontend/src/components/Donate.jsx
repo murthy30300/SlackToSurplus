@@ -1,55 +1,277 @@
-// Import necessary dependencies
-import React from 'react';
-import Base from './Base';  // Assuming base.jsx is located in the same folder
-import Map from '../assets/images/map.jpg'
-const Donate = () => {
+import React, { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+import axios from 'axios';
+import '../App.css';
+
+const FOOD_TYPES = {
+  COOKED: 'COOKED',
+  RAW: 'RAW',
+  PACKAGED: 'PACKAGED',
+  BEVERAGES: 'BEVERAGES',
+  BAKERY: 'BAKERY',
+  PRODUCE: 'PRODUCE',
+  OTHER: 'OTHER'
+};
+
+const PACKAGING_TYPES = {
+  CONTAINER: 'CONTAINER',
+  BOX: 'BOX',
+  BAG: 'BAG',
+  WRAPPED: 'WRAPPED',
+  NONE: 'NONE'
+};
+
+const OFFER_STATUS = {
+  AVAILABLE: 'AVAILABLE',
+  RESERVED: 'RESERVED',
+  COMPLETED: 'COMPLETED',
+  EXPIRED: 'EXPIRED',
+  CANCELLED: 'CANCELLED'
+};
+
+const DONATION_STATUS = {
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  IN_TRANSIT: 'IN_TRANSIT',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+};
+
+function Donate() {
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    foodType: '',
+    quantity: '',
+    description: '',
+    location: '',
+    expiryDate: new Date(),
+    packagingType: '',
+    pickupInstructions: '',
+    isPerishable: false,
+    dietaryNotes: '',
+    offerStatus: OFFER_STATUS.AVAILABLE,
+    donationStatus: DONATION_STATUS.PENDING,
+    pickuptime: '',
+    completedAt: '',
+    notes: ''
+  });
+  const [submissionStatus, setSubmissionStatus] = useState(null); // To track submission success/failure
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleDateChange = (date) => {
+    setFormData(prev => ({
+      ...prev,
+      expiryDate: date
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Format the data to match backend requirements, especially for date formats
+    const formattedData = {
+      ...formData,
+      expiryDate: formData.expiryDate.toISOString(), // Convert date to ISO format
+      pickuptime: formData.pickuptime ? formData.pickuptime.toISOString() : null,
+      completedAt: formData.completedAt ? formData.completedAt.toISOString() : null,
+    };
+
+    try {
+      const response = await axios.post('http://localhost:1987/foodOffers', formattedData);
+      console.log('Form submitted:', response.data);
+      setSubmissionStatus('success');
+      // Optionally reset the form
+      setFormData({
+        foodType: '',
+        quantity: '',
+        description: '',
+        location: '',
+        expiryDate: new Date(),
+        packagingType: '',
+        pickupInstructions: '',
+        isPerishable: false,
+        dietaryNotes: '',
+        offerStatus: OFFER_STATUS.AVAILABLE,
+        donationStatus: DONATION_STATUS.PENDING,
+        pickuptime: '',
+        completedAt: '',
+        notes: ''
+      });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setSubmissionStatus('error');
+    }
+  };
+
+  const nextStep = () => setStep(step + 1);
+  const prevStep = () => setStep(step - 1);
+
+  const renderStep = () => {
+    switch (step) {
+      case 1:
+        return (
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold mb-4">Select Food Type</h2>
+            <div className="grid grid-cols-2 gap-4">
+              {Object.values(FOOD_TYPES).map((type) => (
+                <button
+                  key={type}
+                  className={`p-4 rounded-lg border ${
+                    formData.foodType === type
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-white hover:bg-gray-50'
+                  }`}
+                  onClick={() => {
+                    setFormData(prev => ({ ...prev, foodType: type }));
+                    nextStep();
+                  }}
+                >
+                  {type.charAt(0) + type.slice(1).toLowerCase()}
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+      case 2:
+        return (
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold mb-4">Food Details</h2>
+            <div>
+              <label className="block mb-2">Quantity (servings)</label>
+              <input
+                type="number"
+                name="quantity"
+                value={formData.quantity}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded"
+                placeholder="Number of servings"
+              />
+            </div>
+            <div>
+              <label className="block mb-2">Description</label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded"
+                placeholder="Describe the food items"
+                rows="3"
+              />
+            </div>
+            <div>
+              <label className="block mb-2">Expiry Date</label>
+              <DatePicker
+                selected={formData.expiryDate}
+                onChange={handleDateChange}
+                className="w-full p-2 border rounded"
+                minDate={new Date()}
+              />
+            </div>
+            <div className="flex justify-between mt-4">
+              <button
+                onClick={prevStep}
+                className="px-4 py-2 bg-gray-200 rounded"
+              >
+                Back
+              </button>
+              <button
+                onClick={nextStep}
+                className="px-4 py-2 bg-blue-500 text-white rounded"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        );
+      case 3:
+        return (
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold mb-4">Packaging & Location</h2>
+            <div>
+              <label className="block mb-2">Packaging Type</label>
+              <select
+                name="packagingType"
+                value={formData.packagingType}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded"
+              >
+                <option value="">Select packaging type</option>
+                {Object.values(PACKAGING_TYPES).map(type => (
+                  <option key={type} value={type}>
+                    {type.charAt(0) + type.slice(1).toLowerCase()}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block mb-2">Location</label>
+              <input
+                type="text"
+                name="location"
+                value={formData.location}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded"
+                placeholder="Enter pickup location"
+              />
+            </div>
+            <div>
+              <label className="block mb-2">Pickup Instructions</label>
+              <textarea
+                name="pickupInstructions"
+                value={formData.pickupInstructions}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded"
+                placeholder="Enter pickup instructions"
+                rows="3"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="isPerishable"
+                checked={formData.isPerishable}
+                onChange={handleInputChange}
+                id="isPerishable"
+              />
+              <label htmlFor="isPerishable">Is this food perishable?</label>
+            </div>
+            <div>
+              <label className="block mb-2">Dietary Notes</label>
+              <textarea
+                name="dietaryNotes"
+                value={formData.dietaryNotes}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded"
+                placeholder="Enter any dietary notes or restrictions"
+                rows="2"
+              />
+            </div>
+            <div className="flex justify-between mt-4">
+              <button onClick={prevStep} className="px-4 py-2 bg-gray-200 rounded">Back</button>
+              <button onClick={handleSubmit} className="px-4 py-2 bg-green-500 text-white rounded">Submit Donation</button>
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
-    <Base>
-      {/* Main container for the food sharing UI */}
-      <div className="share-food-container" style={{ display: 'flex' }}>
-        {/* Left Side - Form for Individual/Bulk food sharing */}
-        <div className="food-sharing-form" style={{ flex: '1', padding: '20px' }}>
-          <h2>Want to share food?</h2>
-          <div>
-            <button className="btn-individual" style={buttonStyle}>Individual</button>
-            <button className="btn-bulk" style={buttonStyle}>Bulk</button>
-          </div>
-          <div className="location-search">
-            <input
-              type="text"
-              placeholder="Search Location"
-              style={{
-                marginTop: '20px',
-                padding: '10px',
-                width: '100%',
-                borderRadius: '5px',
-                border: '1px solid #ccc',
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Right Side - Displaying the Map */}
-        <div className="food-map" style={{ flex: '1', padding: '20px' }}>
-          <img
-            src={Map}
-            alt="Map"
-            style={{ width: '100%', borderRadius: '10px' }}
-          />
-        </div>
-      </div>
-    </Base>
+    <div className="max-w-2xl mx-auto p-6">
+      {submissionStatus === 'success' && <div className="text-green-500">Donation submitted successfully!</div>}
+      {submissionStatus === 'error' && <div className="text-red-500">Error submitting donation.</div>}
+      <div className="mb-8">{renderStep()}</div>
+    </div>
   );
-};
+}
 
-const buttonStyle = {
-  margin: '10px',
-  padding: '10px 20px',
-  backgroundColor: '#f5c6c6',
-  border: 'none',
-  borderRadius: '5px',
-  cursor: 'pointer',
-};
-
-// Export the component
 export default Donate;

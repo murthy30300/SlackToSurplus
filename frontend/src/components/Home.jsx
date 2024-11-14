@@ -33,12 +33,12 @@ const Home = () => {
         },
       });
   
-      if (response.status === 200 && response.data.username) {
+      if (response.status === 200 && response.data.user) {
         setMessage('Login successful');
   
         // Store the username in localStorage
-        localStorage.setItem('user', JSON.stringify({ username: response.data.username }));
-  
+        localStorage.setItem('user', JSON.stringify(response.data));
+        console.log(user.username)
         navigate('/UserDash');
       } else {
         setMessage('Login failed. Please check your credentials.');
