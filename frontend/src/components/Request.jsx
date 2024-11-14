@@ -40,23 +40,6 @@ const Request = () => {
               <p>Freshly made</p>
             </div>
           </div>
-
-          {/* Filter section */}
-          {/* <div className="filter-section">
-            <h3>Filter</h3>
-            <div>
-              <label>
-                <input type="radio" name="filter" value="small" defaultChecked /> Small
-              </label>
-            </div>
-            <div>
-              <label>
-                <input type="radio" name="filter" value="bulk" /> Bulk
-              </label>
-            </div>
-          </div> */}
-
-          {/* Posts container */}
           <div className="posts-container">
             {posts.map(post => (
               <div key={post.id} className="post">

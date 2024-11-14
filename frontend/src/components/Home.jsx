@@ -23,22 +23,6 @@ const Home = () => {
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
-  const handleLogout = async () => {
-    try {
-      // Send a request to the backend to invalidate the session
-      await axios.post('http://localhost:1987/logout', {}, { withCredentials: true });
-  
-      // Clear the user data from localStorage
-      localStorage.removeItem('user');
-  
-      // Optionally navigate back to the login or home page
-      navigate('/');
-      setMessage('Logged out successfully.');
-    } catch (error) {
-      console.error('Logout error:', error.response || error.message);
-      setMessage('Logout failed.');
-    }
-  };
   const handleLogin = async (e) => {
     e.preventDefault();
     try {

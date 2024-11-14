@@ -20,16 +20,14 @@ const Base = ({ children, toggleSection }) => {
  
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost:1987/logout', {}, { withCredentials: true });
+     // await axios.post('http://localhost:1987/logout', {}, { withCredentials: true });
       localStorage.removeItem('user');
       navigate('/');
     } catch (error) {
       console.error('Logout error:', error.response || error.message);
     }
   }
-  // Function to handle modal opening
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+
 
   // Function to handle search modal opening and closing
   const openSearchModal = () => setIsSearchModalOpen(true);
@@ -68,7 +66,7 @@ const Base = ({ children, toggleSection }) => {
           <img src={foodDonate} alt="Donate" onClick={() => navigate('/Donate')} />
           <img src={food3} alt="Food" onClick={() => navigate('/Request')} />
           {/* Instead of navigating to '/Post', open the modal */}
-          <img src={create} alt="Create" onClick={openModal} />
+          <img src={create} alt="Create" onClick={()=>navigate('/Post')} />
           <img src = {User} alt="user" onClick={()=>navigate('/User')} />
         </div>
       </div>
@@ -107,34 +105,7 @@ const Base = ({ children, toggleSection }) => {
         </div>
       </div>
 
-      {/* Modal for Create Post */}
-      {isModalOpen && (
-        <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>Create a New Post</h2>
-            <textarea
-              placeholder="Write a caption..."
-              value={caption}
-              onChange={handleCaptionChange}
-              className="caption-input"
-            />
-            <div className="media-upload">
-              <label htmlFor="media-upload-input">
-                <span role="img" aria-label="media">📷</span> Upload Media
-              </label>
-              <input
-                id="media-upload-input"
-                type="file"
-                accept="image/*,video/*"
-                onChange={handleMediaUpload}
-              />
-            </div>
-            {media && <img src={media} alt="Uploaded media preview" className="media-preview" />}
-            <button className="post-button" onClick={handlePost}>Post</button>
-            <button className="close-button" onClick={closeModal}>Close</button>
-          </div>
-        </div>
-      )}
+
 
       {/* Modal for Search */}
       {isSearchModalOpen && (
