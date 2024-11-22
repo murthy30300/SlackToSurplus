@@ -9,16 +9,15 @@ function Navbar({ view, setView }) {
   ];
 
   return (
-    <nav style={styles.navbar}>
+    <nav className="flex space-x-4 mb-6 bg-white p-4 rounded-lg shadow-sm">
       {navButtons.map((button) => (
         <button
           key={button.key}
           onClick={() => setView(button.key)}
-          style={
-            view === button.key
-              ? { ...styles.navButton, ...styles.activeButton }
-              : styles.navButton
-          }
+          className={`px-4 py-2 rounded-lg font-medium transition-colors
+            ${view === button.key
+              ? 'bg-blue-600 text-white'
+              : 'text-gray-600 hover:bg-gray-100'}`}
         >
           {button.label}
         </button>
@@ -26,11 +25,5 @@ function Navbar({ view, setView }) {
     </nav>
   );
 }
-
-const styles = {
-  navbar: { display: 'flex', gap: '10px', marginBottom: '20px' },
-  navButton: { padding: '10px', cursor: 'pointer', border: '1px solid #ccc' },
-  activeButton: { backgroundColor: '#007BFF', color: '#fff' },
-};
 
 export default Navbar;

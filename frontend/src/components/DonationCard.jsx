@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 function DonationCard({ donation, onAction, actionLabel }) {
@@ -10,144 +9,95 @@ function DonationCard({ donation, onAction, actionLabel }) {
     }
   };
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'AVAILABLE':
+        return 'bg-green-100 text-green-800';
+      case 'PENDING':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'CONFIRMED':
+        return 'bg-blue-100 text-blue-800';
+      case 'COMPLETED':
+        return 'bg-teal-100 text-teal-800';
+      case 'CANCELLED':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const isActionable = (status) => ['AVAILABLE', 'PENDING'].includes(status);
+
   return (
-    <div style={styles.card}>
-      <div style={styles.header}>
-        <h3 style={styles.title}>{donation.foodType || 'Unnamed Donation'}</h3>
-        <span style={getStatusStyle(donation.status)}>{donation.status || 'Unknown'}</span>
-      </div>
-
-      <div style={styles.content}>
-        {donation.description && <p style={styles.description}>{donation.description}</p>}
-        <div style={styles.details}>
-          {donation.quantity && (
-            <p style={styles.detail}>
-              <span style={styles.label}>Quantity:</span> {donation.quantity} servings
-            </p>
-          )}
-          {donation.expiryDate && (
-            <p style={styles.detail}>
-              <span style={styles.label}>Expiry Date:</span> {formatDate(donation.expiryDate)}
-            </p>
-          )}
-          {donation.location && (
-            <p style={styles.detail}>
-              <span style={styles.label}>Location:</span> {donation.location}
-            </p>
-          )}
-          {donation.packagingType && (
-            <p style={styles.detail}>
-              <span style={styles.label}>Packaging:</span> {donation.packagingType}
-            </p>
-          )}
-          {donation.dietaryNotes && (
-            <p style={styles.detail}>
-              <span style={styles.label}>Dietary Notes:</span> {donation.dietaryNotes}
-            </p>
-          )}
+    <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+      <div className="p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-semibold text-gray-900">
+            {donation.foodType || 'Unnamed Donation'}
+          </h3>
+          <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(donation.status)}`}>
+            {donation.status || 'Unknown'}
+          </span>
         </div>
-      </div>
 
-      {actionLabel && (
-        <button 
-          onClick={() => onAction(donation)} 
-          style={getActionButtonStyle(donation.status)}
-          disabled={!isActionable(donation.status)}
-        >
-          {actionLabel}
-        </button>
-      )}
+        <div className="space-y-4">
+          {donation.description && (
+            <p className="text-gray-600">{donation.description}</p>
+          )}
+          
+          <div className="space-y-2">
+            {donation.quantity && (
+              <div className="flex items-center text-sm">
+                <span className="font-medium text-gray-700 w-32">Quantity:</span>
+                <span className="text-gray-600">{donation.quantity} servings</span>
+              </div>
+            )}
+            
+            {donation.expiryDate && (
+              <div className="flex items-center text-sm">
+                <span className="font-medium text-gray-700 w-32">Expiry Date:</span>
+                <span className="text-gray-600">{formatDate(donation.expiryDate)}</span>
+              </div>
+            )}
+            
+            {donation.location && (
+              <div className="flex items-center text-sm">
+                <span className="font-medium text-gray-700 w-32">Location:</span>
+                <span className="text-gray-600">{donation.location}</span>
+              </div>
+            )}
+            
+            {donation.packagingType && (
+              <div className="flex items-center text-sm">
+                <span className="font-medium text-gray-700 w-32">Packaging:</span>
+                <span className="text-gray-600">{donation.packagingType}</span>
+              </div>
+            )}
+            
+            {donation.dietaryNotes && (
+              <div className="flex items-center text-sm">
+                <span className="font-medium text-gray-700 w-32">Dietary Notes:</span>
+                <span className="text-gray-600">{donation.dietaryNotes}</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {actionLabel && (
+          <button 
+            onClick={() => onAction(donation)}
+            disabled={!isActionable(donation.status)}
+            className={`mt-6 w-full px-4 py-2 rounded-lg font-medium transition-colors
+              ${isActionable(donation.status)
+                ? 'bg-blue-600 text-white hover:bg-blue-700'
+                : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
+          >
+            {actionLabel}
+          </button>
+        )}
+      </div>
     </div>
   );
 }
-
-const getStatusStyle = (status) => ({
-  ...styles.status,
-  backgroundColor: getStatusColor(status)
-});
-
-const getStatusColor = (status) => {
-  switch (status) {
-    case 'AVAILABLE':
-      return '#e8f5e9';
-    case 'PENDING':
-      return '#fff3e0';
-    case 'CONFIRMED':
-      return '#e3f2fd';
-    case 'COMPLETED':
-      return '#e0f2f1';
-    case 'CANCELLED':
-      return '#ffebee';
-    default:
-      return '#f5f5f5';
-  }
-};
-
-const isActionable = (status) => ['AVAILABLE', 'PENDING'].includes(status);
-
-const getActionButtonStyle = (status) => ({
-  ...styles.button,
-  opacity: isActionable(status) ? 1 : 0.5,
-  cursor: isActionable(status) ? 'pointer' : 'not-allowed',
-});
-
-const styles = {
-  card: {
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    padding: '15px',
-    backgroundColor: '#fff',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-  },
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '15px',
-  },
-  title: {
-    fontSize: '18px',
-    fontWeight: 'bold',
-    margin: 0,
-    color: '#2c3e50',
-  },
-  content: {
-    marginBottom: '15px',
-  },
-  description: {
-    marginBottom: '10px',
-    color: '#34495e',
-  },
-  details: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
-  },
-  detail: {
-    margin: 0,
-    color: '#34495e',
-  },
-  label: {
-    fontWeight: 'bold',
-    color: '#2c3e50',
-  },
-  status: {
-    padding: '5px 10px',
-    borderRadius: '4px',
-    fontSize: '14px',
-    fontWeight: '500',
-  },
-  button: {
-    width: '100%',
-    padding: '10px',
-    marginTop: '15px',
-    backgroundColor: '#0288d1',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '5px',
-    transition: 'all 0.3s ease',
-    fontWeight: '500',
-  }
-};
 
 export default DonationCard;

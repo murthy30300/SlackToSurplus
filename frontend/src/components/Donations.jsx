@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import DonationCard from './DonationCard';
+import { Loader2 } from 'lucide-react';
 
 function Donations() {
   const [donations, setDonations] = useState([]);
@@ -16,7 +17,6 @@ function Donations() {
       try {
         const response = await axios.get(`${API_BASE_URL}/foodOffers`);
         setDonations(response.data);
-        console.log(response.data)
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to fetch donations');
       } finally {
@@ -29,24 +29,41 @@ function Donations() {
 
   const handleRequest = async (donation) => {
     try {
-      console.log('Sending offerId:', donation.foid);
-  
-      // Assuming backend expects JSON body
-      await axios.post(`${API_BASE_URL}/requests/create?offerId=${donation.foid}&requesterId=${JSON.parse(localStorage.getItem('user')).user.uid}`);
-
+      await axios.post(
+        `${API_BASE_URL}/requests/create?offerId=${donation.foid}&requesterId=${JSON.parse(localStorage.getItem('user')).user.uid}`
+      );
       alert('Request sent successfully!');
     } catch (err) {
-      console.error('Error during request creation:', err.response?.data || err.message);
       alert(err.response?.data?.message || 'Failed to send request');
     }
   };
-  
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
-  if (donations.length === 0) return <div>No donations available</div>;
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12 bg-red-50 rounded-lg">
+        <p className="text-red-600">{error}</p>
+      </div>
+    );
+  }
+
+  if (donations.length === 0) {
+    return (
+      <div className="text-center py-12 bg-gray-50 rounded-lg">
+        <p className="text-gray-600">No donations available</p>
+      </div>
+    );
+  }
 
   return (
-    <div style={styles.cardGrid}>
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {donations.map((donation) => (
         <DonationCard
           key={donation.foid}
@@ -59,9 +76,5 @@ function Donations() {
     </div>
   );
 }
-
-const styles = {
-  cardGrid: { display: 'grid', gap: '20px' },
-};
 
 export default Donations;

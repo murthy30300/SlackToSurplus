@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import DonationCard from './DonationCard';
+import { Loader2 } from 'lucide-react';
 
 function Requests() {
   const [requests, setRequests] = useState([]);
@@ -36,12 +37,32 @@ function Requests() {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
-  if (requests.length === 0) return <div>No requests found</div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12 bg-red-50 rounded-lg">
+        <p className="text-red-600">{error}</p>
+      </div>
+    );
+  }
+
+  if (requests.length === 0) {
+    return (
+      <div className="text-center py-12 bg-gray-50 rounded-lg">
+        <p className="text-gray-600">No requests found</p>
+      </div>
+    );
+  }
 
   return (
-    <div style={styles.cardGrid}>
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {requests.map((request) => (
         <DonationCard
           key={request.id}
@@ -54,9 +75,5 @@ function Requests() {
     </div>
   );
 }
-
-const styles = {
-  cardGrid: { display: 'grid', gap: '20px' },
-};
 
 export default Requests;

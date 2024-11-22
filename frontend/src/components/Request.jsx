@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
 import Navbar from './Navbar';
 import DataView from './DataView';
+import Base from './Base';
 
 function Request() {
   const [view, setView] = useState('donations');
 
   return (
-    <div style={styles.container}>
-      <Navbar view={view} setView={setView} />
-      <DataView view={view} />
-    </div>
+    <Base>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <Navbar view={view} setView={setView} />
+        <DataView view={view} />
+      </div>
+    </Base>
   );
 }
-
-const styles = {
-  container: { padding: '20px' },
-};
 
 export default Request;

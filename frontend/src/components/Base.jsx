@@ -1,133 +1,97 @@
-import React, { useState } from 'react'; 
-import { useNavigate } from 'react-router-dom';  // Import the useNavigate hook
-import '../CSS/Base.css';
-import homeIcon from '../assets/svgs/homeIcon.svg';
-import search from '../assets/svgs/search.svg';
-import message from '../assets/svgs/message.svg';
-import foodDonate from '../assets/svgs/foodDonate.svg';
-import food3 from '../assets/svgs/food3.svg';
-import create from '../assets/svgs/create.svg';
-import User from '../assets/svgs/user.svg';
-import UserDash from './UserDash';
-import axios from 'axios';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Home, Search, MessageCircle, Heart, PlusSquare, User as UserIcon, Settings, LogOut, Package } from 'lucide-react';
+
 const Base = ({ children, toggleSection }) => {
-  const navigate = useNavigate(); // Initialize the navigate hook
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
-  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false); // State for search modal visibility
-  const [isChatModalOpen, setIsChatModalOpen] = useState(false); // State for chat modal visibility
-  const [caption, setCaption] = useState('');
-  const [media, setMedia] = useState(null);
- 
+  const navigate = useNavigate();
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
+
   const handleLogout = async () => {
     try {
-     // await axios.post('http://localhost:1987/logout', {}, { withCredentials: true });
       localStorage.removeItem('user');
       navigate('/');
     } catch (error) {
-      console.error('Logout error:', error.response || error.message);
+      console.error('Logout error:', error);
     }
-  }
-
-
-  // Function to handle search modal opening and closing
-  const openSearchModal = () => setIsSearchModalOpen(true);
-  const closeSearchModal = () => setIsSearchModalOpen(false);
-
-  // Function to handle chat modal opening and closing
-  const openChatModal = () => setIsChatModalOpen(true);
-  const closeChatModal = () => setIsChatModalOpen(false);
-
-  // Function to handle caption input change
-  const handleCaptionChange = (e) => {
-    setCaption(e.target.value);
-  };
-
-  // Function to handle media upload
-  const handleMediaUpload = (e) => {
-    setMedia(URL.createObjectURL(e.target.files[0]));
-  };
-
-  // Function to handle post submission
-  const handlePost = () => {
-    // Logic for handling post submission (e.g., sending data to the server)
-    console.log('Caption:', caption);
-    console.log('Media:', media);
-    closeModal(); // Close the modal after posting
   };
 
   return (
-    <div className="base-container">
+    <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className="sidebar">
-        <div className="icons">
-          <img src={homeIcon} alt="Home" onClick={() => navigate('/UserDash')} />
-          <img src={search} alt="Search" onClick={openSearchModal} />
-          <img src={message} alt="Messages" onClick={openChatModal} />
-          <img src={foodDonate} alt="Donate" onClick={() => navigate('/Donate')} />
-          <img src={food3} alt="Food" onClick={() => navigate('/Request')} />
-          {/* Instead of navigating to '/Post', open the modal */}
-          <img src={create} alt="Create" onClick={()=>navigate('/Post')} />
-          <img src = {User} alt="user" onClick={()=>navigate('/User')} />
-        </div>
+      <div className="fixed top-0 left-0 h-full w-16 bg-white shadow-lg flex flex-col items-center py-6 space-y-8 border-r border-gray-200">
+        <Home className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => navigate('/UserDash')} />
+        <Search className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => setIsSearchModalOpen(true)} />
+        <MessageCircle className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => setIsChatModalOpen(true)} />
+        <Heart className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => navigate('/Donate')} />
+        <PlusSquare className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => navigate('/Post')} />
+        <Package className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => navigate('/Request')} /> 
+        <UserIcon className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => navigate('/User')} />
       </div>
 
-      {/* Main content wrapper */}
-      <div className="main-wrapper">
-        {/* Main content area */}
-        <div className="main-content">
-          {/* Navbar */}
-          <div className="navbar">
-            <button onClick={() => toggleSection('hunger')} className="nav-btn">
-              Hungers
-            </button>
-            <button onClick={() => toggleSection('offering')} className="nav-btn">
-              Offerings
-            </button>
-            <button onClick={handleLogout}  className="logout-btn">
-                Logout
-              </button>
-            <div className="settings-icon">
-              ⚙️ 
-             
+      {/* Main Content */}
+      <div className="flex-1 ml-16">
+        {/* Navbar */}
+        <div className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              <div className="flex space-x-4">
+                <button onClick={() => toggleSection('hunger')} className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+                  Hungers
+                </button>
+                <button onClick={() => toggleSection('offering')} className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+                  Offerings
+                </button>
+              </div>
+              <div className="flex items-center space-x-4">
+                <button onClick={handleLogout} className="flex items-center px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 transition-colors">
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </button>
+                <Settings className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" />
+              </div>
             </div>
           </div>
-
-          {/* Scrollable dynamic content */}
-          <div className="scrollable-content">
-            {children}
-          </div>
         </div>
 
-        {/* Articles section on the right */}
-        <div className="articles-section">
-          <h2>Articles</h2>
-          <p>SLACK TO SURPLUS </p>
+        {/* Main Content Area */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex gap-8">
+            <div className="flex-1">
+              {children}
+            </div>
+            <div className="hidden lg:block w-80 bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Articles</h2>
+              <p className="text-gray-600">SLACK TO SURPLUS</p>
+            </div>
+          </div>
         </div>
       </div>
 
-
-
-      {/* Modal for Search */}
+      {/* Modals */}
       {isSearchModalOpen && (
-        <div className="modal-overlay" onClick={closeSearchModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>Search</h2>
-            <input type="text" placeholder="Search for something..." className="search-input" />
-            <button onClick={closeSearchModal} className="close-button">Close</button>
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md" onClick={e => e.stopPropagation()}>
+            <h2 className="text-lg font-semibold mb-4">Search</h2>
+            <input type="text" placeholder="Search..." className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+            <button onClick={() => setIsSearchModalOpen(false)} className="mt-4 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+              Close
+            </button>
           </div>
         </div>
       )}
 
-      {/* Modal for Chat */}
       {isChatModalOpen && (
-        <div className="modal-overlay" onClick={closeChatModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>Chat</h2>
-            <div className="chat-container">
-              <div className="chat-message">Welcome to the chat!</div>
-              <input type="text" placeholder="Type a message..." className="chat-input" />
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md" onClick={e => e.stopPropagation()}>
+            <h2 className="text-lg font-semibold mb-4">Messages</h2>
+            <div className="h-64 overflow-y-auto border border-gray-200 rounded-lg p-4 mb-4">
+              <div className="text-gray-600">Welcome to your messages!</div>
             </div>
-            <button onClick={closeChatModal} className="close-button">Close</button>
+            <input type="text" placeholder="Type a message..." className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+            <button onClick={() => setIsChatModalOpen(false)} className="mt-4 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+              Close
+            </button>
           </div>
         </div>
       )}
@@ -136,6 +100,3 @@ const Base = ({ children, toggleSection }) => {
 };
 
 export default Base;
-
-
-
