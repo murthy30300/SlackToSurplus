@@ -1,114 +1,118 @@
 import React, { useState, useEffect } from 'react';
 import DonationCard from './DonationCard';
-import axios from 'axios';
+import { fetchDonations, handleDonationAction } from '../services/hi.js';
+
 function Request() {
-  const [view, setView] = useState('requests');
+  const [view, setView] = useState('donations');
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const storedData = JSON.parse(localStorage.getItem("user"));
+  const [error, setError] = useState(null);
+  const storedData = JSON.parse(localStorage.getItem("user") || '{"user":{"uid":""}}');
+
   const fetchData = async () => {
     setLoading(true);
-    try {
-      let data;
+    setError(null);
 
-      switch (view) {
-        case 'requests':
-          // Get requests made by the current user
-          const requesterId = localStorage.getItem(storedData.user.uid); // Assume user ID is stored in local storage
-          const responseRequests = await axios.get(`http://localhost:1987/requests/user/${requesterId}`);
-          data = responseRequests.data;
-          break;
-
-        case 'myRequests':
-          // Get requests on the user's donations
-          const offerId = localStorage.getItem(storedData.user.uid); // Replace with actual offer ID
-          const responseMyRequests = await axios.get(`http://localhost:1987/requests/offer/${offerId}`);
-          data = responseMyRequests.data;
-          break;
-
-        case 'donations':
-          // Get all available donations
-          const responseDonations = await axios.get("http://localhost:1987/foodOffers");
-          data = responseDonations.data;
-          break;
-
-        case 'myDonations':
-          // Get donations posted by the user
-          //const userId = localStorage.getItem(storedData.user.uid);
-          console.log('heloooooooooooooooooooooo')
-          console.log(storedData.user.uid)
-          const ud = storedData.user.uid
-          const responseMyDonations = await axios.get(`http://localhost:1987/foodOffers/mydonations?userId=${ud}`);
-          data = responseMyDonations.data;
-          break;
-
-        default:
-          data = [];
-      }
+    const { data, error: fetchError } = await fetchDonations(storedData.user.uid, view);
+    
+    if (fetchError) {
+      setError(fetchError);
+    } else {
       setItems(data);
-    } catch (error) {
-      console.error(`Error fetching ${view}:`, error);
-    } finally {
-      setLoading(false);
     }
+    
+    setLoading(false);
   };
 
   useEffect(() => {
-    fetchData();
-  }, [view]);
+    if (storedData.user.uid) {
+      fetchData();
+    }
+  }, [view, storedData.user.uid]);
 
-  const renderTitle = () => {
+  const handleAction = async (donation) => {
+    const { success, message } = await handleDonationAction(view, donation, storedData.user.uid);
+    
+    if (success) {
+      fetchData();
+    }
+    
+    alert(message);
+  };
+
+  const getActionLabel = (item) => {
+    if (!item) return '';
+
     switch (view) {
-      case 'requests':
-        return 'My Pending Requests';
-      case 'myRequests':
-        return 'Requests on My Donations';
       case 'donations':
-        return 'Available Donations';
+        return 'Request for this food';
       case 'myDonations':
-        return 'My Donations';
+        switch (item.status) {
+          case 'PENDING':
+            return 'Accept Request';
+          case 'CONFIRMED':
+            return 'Mark as Completed';
+          default:
+            return item.status;
+        }
+      case 'requests':
+        return item.status === 'PENDING' ? 'Cancel Request' : item.status;
+      case 'myRequests':
+        return item.status;
       default:
         return '';
     }
   };
 
-  const renderActionLabel = () => {
-    switch (view) {
-      case 'requests':
-        return 'Cancel Request';
-      case 'myRequests':
-        return 'Accept Request';
-      case 'donations':
-        return 'Request Donation';
-      case 'myDonations':
-        return 'Edit Donation';
-      default:
-        return '';
-    }
-  };
+  if (!storedData.user.uid) {
+    return <div style={styles.error}>Please log in to view donations and requests.</div>;
+  }
 
   return (
-    <div>
+    <div style={styles.container}>
       <nav style={styles.navbar}>
-        <button onClick={() => setView('requests')} style={styles.navButton}>Requests</button>
-        <button onClick={() => setView('myRequests')} style={styles.navButton}>My Requests</button>
-        <button onClick={() => setView('donations')} style={styles.navButton}>Donations</button>
-        <button onClick={() => setView('myDonations')} style={styles.navButton}>My Donations</button>
+        <button 
+          onClick={() => setView('donations')} 
+          style={view === 'donations' ? {...styles.navButton, ...styles.activeButton} : styles.navButton}
+        >
+          Available Donations
+        </button>
+        <button 
+          onClick={() => setView('myDonations')} 
+          style={view === 'myDonations' ? {...styles.navButton, ...styles.activeButton} : styles.navButton}
+        >
+          My Donations
+        </button>
+        <button 
+          onClick={() => setView('requests')} 
+          style={view === 'requests' ? {...styles.navButton, ...styles.activeButton} : styles.navButton}
+        >
+          My Requests
+        </button>
+        <button 
+          onClick={() => setView('myRequests')} 
+          style={view === 'myRequests' ? {...styles.navButton, ...styles.activeButton} : styles.navButton}
+        >
+          Requests on My Donations
+        </button>
       </nav>
-      
-      <div style={styles.container}>
-        <h1 style={styles.title}>{renderTitle()}</h1>
-        
+
+      <div style={styles.content}>
         {loading ? (
           <div style={styles.loading}>Loading...</div>
+        ) : error ? (
+          <div style={styles.error}>{error}</div>
+        ) : items.length === 0 ? (
+          <div style={styles.empty}>No items found.</div>
         ) : (
-          <div style={styles.cardContainer}>
+          <div style={styles.cardGrid}>
             {items.map((item) => (
               <DonationCard
-                key={item.foid}
+                key={item.id || item.foid}
                 donation={item}
-                actionLabel={renderActionLabel()}
-                onAction={(donation) => console.log(`${renderActionLabel()} on:`, donation)}
+                actionLabel={getActionLabel(item)}
+                onAction={handleAction}
+                showAction={view !== 'myRequests' || item.status === 'PENDING'}
               />
             ))}
           </div>
@@ -117,39 +121,68 @@ function Request() {
     </div>
   );
 }
+
 const styles = {
-  navbar: {
-    display: 'flex',
-    justifyContent: 'space-around',
-    padding: '10px',
-    backgroundColor: '#333',
-  },
-  navButton: {
-    color: '#fff',
-    backgroundColor: '#555',
-    padding: '10px 15px',
-    border: 'none',
-    cursor: 'pointer',
-    fontSize: '16px',
-  },
   container: {
     padding: '20px',
-    maxWidth: '800px',
+    maxWidth: '1200px',
     margin: '0 auto',
   },
-  title: {
-    fontSize: '24px',
+  navbar: {
+    display: 'flex',
+    gap: '10px',
     marginBottom: '20px',
-    textAlign: 'center',
+    padding: '10px',
+    backgroundColor: '#f5f5f5',
+    borderRadius: '8px',
+    flexWrap: 'wrap',
+  },
+  navButton: {
+    padding: '10px 20px',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    backgroundColor: '#fff',
+    color: '#333',
+    transition: 'all 0.3s ease',
+    flexGrow: 1,
+    minWidth: '200px',
+  },
+  activeButton: {
+    backgroundColor: '#0288d1',
+    color: '#fff',
+  },
+  content: {
+    marginTop: '20px',
+  },
+  cardGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    gap: '20px',
   },
   loading: {
     textAlign: 'center',
+    padding: '20px',
     fontSize: '18px',
+    color: '#666',
   },
-  cardContainer: {
-    display: 'grid',
-    gap: '20px',
+  error: {
+    textAlign: 'center',
+    padding: '20px',
+    fontSize: '18px',
+    color: '#d32f2f',
+    backgroundColor: '#ffebee',
+    borderRadius: '8px',
+    marginTop: '20px',
   },
+  empty: {
+    textAlign: 'center',
+    padding: '20px',
+    fontSize: '18px',
+    color: '#666',
+    backgroundColor: '#f5f5f5',
+    borderRadius: '8px',
+  }
 };
 
 export default Request;
