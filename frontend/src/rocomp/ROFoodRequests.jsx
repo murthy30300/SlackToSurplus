@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Filter, MapPin, Calendar, Clock } from 'lucide-react';
+import { Filter, MapPin } from 'lucide-react';
 import ROBase from './ROBase';
 import RequestCard from './cards/RequestCard';
 import FilterPanel from './cards/FilterPanel';
@@ -10,17 +10,19 @@ const ROFoodRequests = () => {
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     location: '',
-    foodType: '',
-    expiryDate: ''
+    foodType: ''
   });
+  const storedData = JSON.parse(localStorage.getItem('user') || '{"user":{"uid":""}}');
 
   useEffect(() => {
+    console.log('Applied Filters:', filters);
     const fetchDonations = async () => {
       try {
         setLoading(true);
         const response = await axios.get('http://localhost:1987/api/recipient/donations', {
           params: filters
         });
+        console.log('Fetched Donations:', response.data);
         setDonations(response.data);
       } catch (error) {
         console.error('Error fetching donations:', error);
@@ -34,10 +36,9 @@ const ROFoodRequests = () => {
 
   const handleRequest = async (donationId) => {
     try {
-      const user = JSON.parse(localStorage.getItem('roUser'));
       await axios.post('http://localhost:1987/api/recipient/food-request', {
         foodOfferId: donationId,
-        recipientId: user.id,
+        recipientId: storedData.user.id,
         status: 'PENDING'
       });
       alert('Request sent successfully!');
@@ -51,7 +52,7 @@ const ROFoodRequests = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Available Food Donations</h1>
-          <button 
+          <button
             className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             onClick={() => document.getElementById('filterPanel').classList.toggle('hidden')}
           >

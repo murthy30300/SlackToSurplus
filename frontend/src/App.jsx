@@ -15,6 +15,7 @@ import ROUrgent from './rocomp/ROUrgent';
 import ROLogistics from './rocomp/ROLogistics';
 import ROCommunity from './rocomp/ROCommunity';
 import ROFoodRequests from './rocomp/ROFoodRequests';
+import ROProfile from './rocomp/ROProfile';
 
 
 function App() {
@@ -39,7 +40,7 @@ function App() {
           <Route path="ro/logistics" element = {<ROLogistics/>}/>
           <Route path="ro/community" element = {<ROCommunity/>}/>
           <Route path ="ro/requests" element = {<ROFoodRequests/>}/>
-
+          <Route path="ro/orgprofile" element = {<ROProfile/>}/>
         </Routes>
       </div>
     </Router>

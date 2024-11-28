@@ -27,6 +27,7 @@ const RODashboard = () => {
         ]);
         setDonations(donationsRes.data);
         setStats(statsRes.data);
+        console.log('=======',stats.totalReceived)
         console.log('1.......', donationsRes.data);
         console.log('2...........', statsRes.data);
       } catch (error) {

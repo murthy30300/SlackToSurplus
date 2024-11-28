@@ -11,24 +11,27 @@ const ROUrgent = () => {
     neededBy: '',
     eventType: 'GENERAL'
   });
-
+  const storedData = JSON.parse(localStorage.getItem('user') || '{"user":{"uid":""}}');
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const user = JSON.parse(localStorage.getItem('roUser'));
+      const u = JSON.parse(localStorage.getItem('user'));
       const response = await axios.post('http://localhost:1987/api/recipient/urgent-need', {
         ...urgentNeed,
-        organizationId: user.id
+        organization: { uid: storedData.user.uid }  // Pass the User object, not just the uid
       });
+      console.log(response.data)
       alert('Urgent need posted successfully!');
       setUrgentNeed({
         title: '',
         description: '',
         quantityNeeded: '',
         neededBy: '',
-        eventType: 'GENERAL'
+        eventType: 'GENERAL',
+        uid:storedData.user.uid
       });
     } catch (error) {
+      console.log(error)
       alert('Failed to post urgent need');
     }
   };
