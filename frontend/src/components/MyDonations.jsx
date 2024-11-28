@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import DonationCard from './DonationCard';
-import { Loader2 } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import DonationCard from "./DonationCard";
+import { Loader2 } from "lucide-react";
 
 function MyDonations() {
   const [myDonations, setMyDonations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const storedData = JSON.parse(localStorage.getItem('user') || '{"user":{"uid":""}}');
-  const API_BASE_URL = 'http://localhost:1987';
+  const storedData = JSON.parse(
+    localStorage.getItem("user") || '{"user":{"uid":""}}'
+  );
+  const API_BASE_URL = "http://localhost:1987";
 
   useEffect(() => {
     const fetchMyDonations = async () => {
@@ -16,10 +18,13 @@ function MyDonations() {
       setError(null);
 
       try {
-        const response = await axios.get(`${API_BASE_URL}/foodOffers/mydonations?userId=${storedData.user.uid}`);
+        const response = await axios.get(
+          `${API_BASE_URL}/foodOffers/mydonations?userId=${storedData.user.uid}`
+        );
+        console.log(response.data)
         setMyDonations(response.data);
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to fetch my donations');
+        setError(err.response?.data?.message || "Failed to fetch my donations");
       } finally {
         setLoading(false);
       }
@@ -30,10 +35,10 @@ function MyDonations() {
 
   const handleComplete = async (donation) => {
     try {
-      await axios.post(`${API_BASE_URL}/requests/${donation.id}/complete`);
-      alert('Donation marked as completed!');
+      await axios.post(`${API_BASE_URL}/requests/${donation.foid}/complete`);
+      alert("Donation marked as completed!");
     } catch (err) {
-      alert(err.response?.data?.message || 'Failed to complete donation');
+      alert(err.response?.data?.message || "Failed to complete donation");
     }
   };
 
@@ -63,13 +68,13 @@ function MyDonations() {
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {myDonations.map((donation) => (
+      {myDonations.map((donation, index) => (
         <DonationCard
-          key={donation.id}
+          key={`${donation.id}-${index}`}
           donation={donation}
           actionLabel="Mark as Completed"
           onAction={handleComplete}
-          showAction={donation.status === 'PENDING'}
+          showAction={donation.status === "PENDING"}
         />
       ))}
     </div>

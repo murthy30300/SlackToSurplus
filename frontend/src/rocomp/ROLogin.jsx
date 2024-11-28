@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Lock, Mail, User } from 'lucide-react';
+import { Mail, Lock, User } from 'lucide-react';
 
-const Home = () => {
+const ROLogin = () => {
   const [isLogin, setIsLogin] = useState(false);
   const navigate = useNavigate();
-  const [user, setUser] = useState({ username: '', email: '', password: '' });
+  const [user, setUser] = useState({ username: '', email: '', password: '', role: 'ORGANIZATION' });
   const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
@@ -17,17 +17,33 @@ const Home = () => {
     e.preventDefault();
     try {
       const response = await axios.get('http://localhost:1987/login', {
-        params: { username: user.username, password: user.password,role: 'INDIVIDUAL' },
+        params: {
+          username: user.username,
+          password: user.password,
+        },
       });
 
       if (response.status === 200 && response.data.user) {
         localStorage.setItem('user', JSON.stringify(response.data));
-        navigate('/UserDash');
+        navigate('/ro/dashboard');
       } else {
-        setMessage('Login failed. Please check your credentials.');
+        setMessage('Login failed. Please check your credentials. 12');
       }
     } catch (error) {
-      setMessage('Login failed. Please check your credentials.');
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('Response error:', error.response);
+        setMessage('Login failed. Invalid username or password. 23');
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error('Request error:', error.request);
+        setMessage('Network error. Please try again later. 24');
+      } else {
+        // Something happened in setting up the request
+        console.error('25 General error:', error.message);
+        setMessage('Login failed. Please check your credentials. 22');
+      }
     }
   };
 
@@ -35,9 +51,9 @@ const Home = () => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:1987/signup', user);
-      if (response.status === 200) {
+      if (response.status === 201) {
         setMessage('Signup successful');
-        setUser({ username: '', email: '', password: '' });
+        setUser({ username: '', email: '', password: '', role: 'ORGANIZATION' });
         setIsLogin(true);
       }
     } catch (error) {
@@ -49,7 +65,7 @@ const Home = () => {
     <div className="min-h-screen flex bg-gray-50">
       <div className="flex-1 flex items-center justify-center p-8">
         <img
-          src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+          src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1470&q=80"
           alt="Food Donation"
           className="w-full max-w-2xl rounded-2xl shadow-xl"
         />
@@ -59,13 +75,11 @@ const Home = () => {
         <div className="w-full max-w-md">
           <div className="bg-white p-8 rounded-2xl shadow-lg">
             <div className="flex mb-8 border-b border-gray-200">
-              <button
-                onClick={() => setIsLogin(false)}
-                className={`flex-1 pb-4 text-center font-medium ${
+              <button onClick={() => setIsLogin(false)}  className={`flex-1 pb-4 text-center font-medium ${
                   !isLogin ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500'
                 }`}
               >
-                Sign up
+                Organization Sign up
               </button>
               <button
                 onClick={() => setIsLogin(true)}
@@ -73,7 +87,7 @@ const Home = () => {
                   isLogin ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500'
                 }`}
               >
-                Login
+                Organization Login
               </button>
             </div>
 
@@ -94,9 +108,8 @@ const Home = () => {
                   </div>
                 </div>
               )}
-
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Organization Name</label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                   <input
@@ -109,7 +122,6 @@ const Home = () => {
                   />
                 </div>
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
                 <div className="relative">
@@ -134,9 +146,11 @@ const Home = () => {
             </form>
 
             {message && (
-              <div className={`mt-4 p-4 rounded-lg ${
-                message.includes('successful') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-              }`}>
+              <div
+                className={`mt-4 p-4 rounded-lg ${
+                  message.includes('successful') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                }`}
+              >
                 {message}
               </div>
             )}
@@ -147,4 +161,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default ROLogin;
