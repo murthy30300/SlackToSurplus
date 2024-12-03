@@ -16,7 +16,7 @@ function MyRequests() {
       setError(null);
 
       try {
-        const response = await axios.get(`${API_BASE_URL}/requests/offer/${storedData.user.uid}`);
+        const response = await axios.get(`${API_BASE_URL}/requests/user/${storedData.user.uid}`);
         setRequests(response.data);
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to fetch requests');
