@@ -28,7 +28,7 @@ function App() {
           <Route path="/Donate" element={<Donate />} />
           <Route path="/Request" element={<Request />} />
           <Route path="/Post" element={<Post />} />
-          <Route path="/User" element={<User />} />
+          <Route path="/User/:username" element={<User />} />
 
           <Route path="/ro/login" element={<ROLogin />} />
           <Route path="/ro/dashboard" element={<RODashboard />} />

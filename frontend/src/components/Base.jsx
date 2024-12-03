@@ -1,19 +1,33 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Home, Search, MessageCircle, Heart, PlusSquare, User as UserIcon, Settings, LogOut, Package } from 'lucide-react';
+import { Home, Search, MessageCircle, HandCoins, PlusSquare, User as UserIcon, Settings, LogOut, Package } from 'lucide-react';
+import axios from 'axios';
 
 const Base = ({ children, toggleSection }) => {
   const navigate = useNavigate();
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); // Add searchQuery to state
+  const [searchResults, setSearchResults] = useState([]); // Add searchResults to state
 
-  const handleLogout = async () => {
+  const handleSearch = async (e) => {
+    e.preventDefault();
     try {
-      localStorage.removeItem('user');
-      navigate('/');
+      const response = await axios.get(`http://localhost:1987/profile/search?username=${searchQuery}`);
+      setSearchResults(response.data ? [response.data] : []); // Ensure results are in an array
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error('Error searching users:', error);
     }
+  };
+
+  const handleUserClick = (username) => {
+    setIsSearchModalOpen(false);
+    navigate(`/User/${username}`);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    navigate('/');
   };
 
   return (
@@ -23,10 +37,10 @@ const Base = ({ children, toggleSection }) => {
         <Home className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => navigate('/UserDash')} />
         <Search className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => setIsSearchModalOpen(true)} />
         <MessageCircle className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => setIsChatModalOpen(true)} />
-        <Heart className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => navigate('/Donate')} />
+        <HandCoins className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => navigate('/Donate')} />
         <PlusSquare className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => navigate('/Post')} />
-        <Package className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => navigate('/Request')} /> 
-        <UserIcon className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => navigate('/User')} />
+        <Package className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => navigate('/Request')} />
+        <UserIcon className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => navigate(`/User/${JSON.parse(localStorage.getItem('user')).user.username}`)} />
       </div>
 
       {/* Main Content */}
@@ -57,9 +71,7 @@ const Base = ({ children, toggleSection }) => {
         {/* Main Content Area */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex gap-8">
-            <div className="flex-1">
-              {children}
-            </div>
+            <div className="flex-1">{children}</div>
             <div className="hidden lg:block w-80 bg-white p-6 rounded-lg shadow-sm border border-gray-200">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Articles</h2>
               <p className="text-gray-600">SLACK TO SURPLUS</p>
@@ -68,28 +80,36 @@ const Base = ({ children, toggleSection }) => {
         </div>
       </div>
 
-      {/* Modals */}
+      {/* Search Modal */}
       {isSearchModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md" onClick={e => e.stopPropagation()}>
-            <h2 className="text-lg font-semibold mb-4">Search</h2>
-            <input type="text" placeholder="Search..." className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
-            <button onClick={() => setIsSearchModalOpen(false)} className="mt-4 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-
-      {isChatModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md" onClick={e => e.stopPropagation()}>
-            <h2 className="text-lg font-semibold mb-4">Messages</h2>
-            <div className="h-64 overflow-y-auto border border-gray-200 rounded-lg p-4 mb-4">
-              <div className="text-gray-600">Welcome to your messages!</div>
+          <div className="bg-[#F7EFEA] rounded-lg p-6 w-full max-w-md">
+            <h2 className="text-lg font-semibold text-[#4A4A4A] mb-4">Search Users</h2>
+            <form onSubmit={handleSearch}>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search users..."
+                className="w-full px-4 py-2 border border-[#E7CCCC] rounded-lg"
+              />
+            </form>
+            <div className="mt-4">
+              {searchResults.length > 0 ? (
+                searchResults.map((user) => (
+                  <div
+                    key={user.username}
+                    onClick={() => handleUserClick(user.username)}
+                    className="p-2 hover:bg-[#F4D8D8] rounded-lg cursor-pointer"
+                  >
+                    <span>{user.name || user.username}</span>
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500">No users found.</p>
+              )}
             </div>
-            <input type="text" placeholder="Type a message..." className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
-            <button onClick={() => setIsChatModalOpen(false)} className="mt-4 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+            <button onClick={() => setIsSearchModalOpen(false)} className="mt-4 bg-[#4C6CE7] text-white py-2 rounded-lg">
               Close
             </button>
           </div>

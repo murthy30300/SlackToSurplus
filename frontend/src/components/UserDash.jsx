@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Base from './Base';
 import { Heart, MessageCircle, Share2, MoreHorizontal } from 'lucide-react';
 
 const UserDash = () => {
+  const navigate = useNavigate();
   const [currentSection, setCurrentSection] = useState('hunger');
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -59,12 +61,16 @@ const UserDash = () => {
     }
   };
 
-  const toggleSection = (section) => {
-    setCurrentSection(section);
+  const handleProfileClick = (username) => {
+    navigate(`/User/${username}`);
+  };
+
+  const handleImageClick = (imageUrl) => {
+    window.open(imageUrl, '_blank');
   };
 
   return (
-    <Base toggleSection={toggleSection}>
+    <Base toggleSection={setCurrentSection}>
       <div className="max-w-2xl mx-auto px-4">
         <div className="mb-8 bg-gradient-to-r from-[#E7CCCC] to-[#F4D8D8] p-6 rounded-xl">
           <h2 className="text-2xl font-bold text-[#4A4A4A]">
@@ -83,16 +89,21 @@ const UserDash = () => {
                 <div key={post.pid} className="bg-[#F7EFEA] rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                   {/* Post Header */}
                   <div className="p-6 flex items-center justify-between border-b border-[#E7CCCC]">
-                    <div className="flex items-center space-x-4">
+                    <div 
+                      className="flex items-center space-x-4 cursor-pointer"
+                      onClick={() => handleProfileClick(post.username)}
+                    >
                       <div className="relative">
                         <img
                           src={post.profilePicUrl || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"}
                           alt={post.username}
-                          className="w-12 h-12 rounded-full object-cover ring-2 ring-[#E78F6C]"
+                          className="w-12 h-12 rounded-full object-cover ring-2 ring-[#E78F6C] cursor-pointer"
                         />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-[#4A4A4A]">{post.username}</h3>
+                        <h3 className="font-semibold text-[#4A4A4A] hover:text-[#4C6CE7]">
+                          {post.username}
+                        </h3>
                         <p className="text-sm text-[#A5B77F]">
                           {new Date(post.createdAt).toLocaleDateString()}
                         </p>
@@ -108,7 +119,10 @@ const UserDash = () => {
                     <p className="text-[#4A4A4A] text-lg mb-6 leading-relaxed">{post.caption}</p>
                     
                     {post.imageUrl && (
-                      <div className="relative rounded-xl overflow-hidden mb-6">
+                      <div 
+                        className="relative rounded-xl overflow-hidden mb-6 cursor-pointer"
+                        onClick={() => handleImageClick(post.imageUrl)}
+                      >
                         <img
                           src={post.imageUrl}
                           alt="Post content"
