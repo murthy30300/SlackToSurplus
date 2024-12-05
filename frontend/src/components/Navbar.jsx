@@ -2,7 +2,7 @@ import React from 'react';
 
 function Navbar({ view, setView }) {
   const navButtons = [
-    { key: 'donations', label: 'Available Donations' },
+    { key: 'donations', label: 'All Donations' },
     { key: 'myDonations', label: 'My Donations' },
     { key: 'requests', label: 'My Requests' },
     { key: 'myRequests', label: 'Requests on My Donations' },

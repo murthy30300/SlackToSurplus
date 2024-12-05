@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Loader2 } from "lucide-react";
-import ROBase from "./ROBase";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Loader2, Calendar, Package, Filter, ChevronDown, ChevronUp } from 'lucide-react';
+import ROBase from './ROBase';
+import toast from 'react-hot-toast';
 
 const ROHistory = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState("ALL");
-  const storedData = JSON.parse(
+  const [filter, setFilter] = useState('ALL');
+  const [expandedId, setExpandedId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+ const storedData = JSON.parse(
     localStorage.getItem("user") || '{"user":{"uid":""}}'
   );
-  const oid = storedData.user.uid;
-  const organizationId = 1;
-  console.log("Stored data:", storedData);
-  console.log("Organizer ID (oid):", oid);
+                                
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -25,29 +26,62 @@ const ROHistory = () => {
         const organizerId = response1.data;
         const response = await axios.get(
           `http://localhost:1987/api/recipient/request-history?organizationId=${organizerId}${
-            filter !== "ALL" ? `&status=${filter}` : ""
+            filter !== 'ALL' ? `&status=${filter}` : ''
           }`
         );
-
         setRequests(response.data);
-        console.log("API Response:", response.data);
       } catch (error) {
-        setError("Failed to fetch request history");
-        console.error("Error fetching request history:", error);
-        setError("Failed to fetch request history");
+        console.error('Error fetching request history:', error);
+        toast.error('Failed to fetch request history');
+        setError('Failed to fetch request history');
       } finally {
         setLoading(false);
       }
     };
 
     fetchHistory();
-  }, [filter]);
+  }, [filter, storedData.user.uid]);
+
+  const filterButtons = [
+    { value: 'ALL', label: 'All Requests' },
+    { value: 'PENDING', label: 'Pending' },
+    { value: 'CONFIRMED', label: 'Confirmed' },
+    { value: 'COMPLETED', label: 'Completed' },
+    { value: 'CANCELLED', label: 'Cancelled' }
+  ];
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'COMPLETED':
+        return 'bg-[#4CE7A8] text-[#4A4A4A]';
+      case 'PENDING':
+        return 'bg-[#E78F6C] text-white';
+      case 'CONFIRMED':
+        return 'bg-[#4C6CE7] text-white';
+      case 'CANCELLED':
+        return 'bg-[#D32E28] text-white';
+      default:
+        return 'bg-[#F7EFEA] text-[#4A4A4A]';
+    }
+  };
+
+  const filteredRequests = requests.filter(request =>
+    request.foodOffer.foodType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    request.foodOffer.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   if (loading) {
     return (
       <ROBase>
-        <div className="flex justify-center items-center h-64">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
+          {[...Array(6)].map((_, idx) => (
+            <div key={idx} className="bg-[#F7EFEA] p-6 rounded-xl">
+              <div className="h-4 bg-[#E7CCCC] rounded w-3/4 mb-4"></div>
+              <div className="h-4 bg-[#E7CCCC] rounded w-1/2 mb-4"></div>
+              <div className="h-20 bg-[#E7CCCC] rounded mb-4"></div>
+              <div className="h-8 bg-[#E7CCCC] rounded"></div>
+            </div>
+          ))}
         </div>
       </ROBase>
     );
@@ -56,75 +90,146 @@ const ROHistory = () => {
   return (
     <ROBase>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Request History</h1>
-          <select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            <option value="ALL">All Requests</option>
-            <option value="PENDING">Pending</option>
-            <option value="CONFIRMED">Confirmed</option>
-            <option value="COMPLETED">Completed</option>
-            <option value="CANCELLED">Cancelled</option>
-          </select>
-        </div>
-
-        {error ? (
-          <div className="text-red-600 text-center">{error}</div>
-        ) : (
-          <div className="space-y-6">
-            {requests.map((request) => (
-              <div
-                key={request.id}
-                className="bg-white p-6 rounded-lg shadow-sm border border-gray-200"
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900">
-                      {request.foodOffer.foodType}
-                    </h3>
-                    <p className="text-sm text-gray-500 mt-1">
-                      {request.foodOffer.description}
-                    </p>
-                  </div>
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      request.status === "COMPLETED"
-                        ? "bg-green-100 text-green-800"
-                        : request.status === "PENDING"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : request.status === "CONFIRMED"
-                        ? "bg-blue-100 text-blue-800"
-                        : "bg-red-100 text-red-800"
-                    }`}
-                  >
-                    {request.status}
-                  </span>
-                </div>
-                <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="text-gray-500">Quantity:</span>
-                    <span className="ml-2 text-gray-900">
-                      {request.foodOffer.quantity}kg
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-gray-500">Request Date:</span>
-                    <span className="ml-2 text-gray-900">
-                      {request.requestDate
-                        ? new Date(
-                            Date.parse(request.requestDate)
-                          ).toLocaleDateString()
-                        : "N/A"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-[#4A4A4A] mb-6">Request History</h1>
+          
+          {/* Search and Filter Section */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+            <div className="relative flex-1">
+              <input
+                type="text"
+                placeholder="Search requests..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-4 pr-10 py-3 bg-white border border-[#E7CCCC] rounded-xl focus:ring-2 focus:ring-[#4C6CE7] focus:border-transparent"
+              />
+              <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#4A4A4A] w-5 h-5" />
+            </div>
+            
+            <div className="flex flex-wrap gap-2">
+              {filterButtons.map((btn) => (
+                <motion.button
+                  key={btn.value}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setFilter(btn.value)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    filter === btn.value
+                      ? 'bg-[#4C6CE7] text-white'
+                      : 'bg-[#F7EFEA] text-[#4A4A4A] hover:bg-[#F4D8D8]'
+                  }`}
+                >
+                  {btn.label}
+                </motion.button>
+              ))}
+            </div>
           </div>
-        )}
+
+          {error ? (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-[#F4D8D8] text-[#D32E28] p-4 rounded-xl text-center"
+            >
+              {error}
+            </motion.div>
+          ) : (
+            <AnimatePresence>
+              <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                {filteredRequests.map((request, index) => (
+                  <motion.div
+                    key={request.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    className="bg-[#F7EFEA] rounded-xl shadow-lg overflow-hidden"
+                  >
+                    <div className="p-6">
+                      <div className="flex justify-between items-start mb-4">
+                        <h3 className="font-medium text-[#4A4A4A]">
+                          {request.foodOffer.foodType}
+                        </h3>
+                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(request.status)}`}>
+                          {request.status}
+                        </span>
+                      </div>
+
+                      <p className="text-sm text-[#4A4A4A] mb-4 line-clamp-2">
+                        {request.foodOffer.description}
+                      </p>
+
+                      <div className="space-y-3 mb-4">
+                        <div className="flex items-center text-sm text-[#4A4A4A]">
+                          <Package className="w-4 h-4 mr-2 text-[#4C6CE7]" />
+                          <span>Quantity: {request.foodOffer.quantity}kg</span>
+                        </div>
+                        <div className="flex items-center text-sm text-[#4A4A4A]">
+                          <Calendar className="w-4 h-4 mr-2 text-[#4C6CE7]" />
+                          <span>Request Date: {
+                            request.requestDate
+                              ? new Date(Date.parse(request.requestDate)).toLocaleDateString()
+                              : 'N/A'
+                          }</span>
+                        </div>
+                      </div>
+
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => setExpandedId(expandedId === request.id ? null : request.id)}
+                        className="w-full flex items-center justify-center text-[#4C6CE7] hover:text-[#E78F6C] transition-colors"
+                      >
+                        {expandedId === request.id ? (
+                          <>
+                            <span className="mr-2">Show Less</span>
+                            <ChevronUp className="w-4 h-4" />
+                          </>
+                        ) : (
+                          <>
+                            <span className="mr-2">Show More</span>
+                            <ChevronDown className="w-4 h-4" />
+                          </>
+                        )}
+                      </motion.button>
+
+                      <AnimatePresence>
+                        {expandedId === request.id && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="mt-4 pt-4 border-t border-[#E7CCCC]"
+                          >
+                            <div className="space-y-2 text-sm text-[#4A4A4A]">
+                              <p><strong>Location:</strong> {request.foodOffer.location}</p>
+                              <p><strong>Status Updated:</strong> {
+                                request.statusUpdateTime
+                                  ? new Date(Date.parse(request.statusUpdateTime)).toLocaleString()
+                                  : 'N/A'
+                              }</p>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </AnimatePresence>
+          )}
+
+          {!error && filteredRequests.length === 0 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center py-12 bg-[#F7EFEA] rounded-xl"
+            >
+              <p className="text-[#4A4A4A]">No requests found matching your criteria.</p>
+            </motion.div>
+          )}
+        </div>
       </div>
     </ROBase>
   );

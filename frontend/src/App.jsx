@@ -16,6 +16,7 @@ import ROLogistics from './rocomp/ROLogistics';
 import ROCommunity from './rocomp/ROCommunity';
 import ROFoodRequests from './rocomp/ROFoodRequests';
 import ROProfile from './rocomp/ROProfile';
+import RecipieGenerator from './components/RecipieGenerator';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path="/Request" element={<Request />} />
           <Route path="/Post" element={<Post />} />
           <Route path="/User/:username" element={<User />} />
+          <Route path="/openai" element={<RecipieGenerator/>}/>
 
           <Route path="/ro/login" element={<ROLogin />} />
           <Route path="/ro/dashboard" element={<RODashboard />} />
