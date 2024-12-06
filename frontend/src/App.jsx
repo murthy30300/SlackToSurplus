@@ -17,6 +17,13 @@ import ROCommunity from './rocomp/ROCommunity';
 import ROFoodRequests from './rocomp/ROFoodRequests';
 import ROProfile from './rocomp/ROProfile';
 import RecipieGenerator from './components/RecipieGenerator';
+import AFoodOffer from './admin/AFoodOffer';
+import AOrganization from './admin/AOrganization';
+import APost from './admin/APost';
+import AProfile from './admin/AProfile';
+import AUrgentNeed from './admin/AUrgentNeed';
+import AUser from './admin/AUser';
+import ABase from './admin/ABase';
 
 
 function App() {
@@ -40,9 +47,17 @@ function App() {
           <Route path="/ro/stories" element={<ROStories />} />
           <Route path="/ro/distribution" element={<RODistribution />} />
           <Route path="ro/logistics" element = {<ROLogistics/>}/>
-          <Route path="ro/community" element = {<ROCommunity/>}/>
+          <Route path="ro/community" element = {<ROProfile/>}/>
           <Route path ="ro/requests" element = {<ROFoodRequests/>}/>
           <Route path="ro/orgprofile" element = {<ROProfile/>}/>
+
+          <Route path ="admin" element = {<ABase/>}/>
+          <Route path="admin/foodoffer" element = {<AFoodOffer/>}/>
+          <Route path="admin/organization" element = {<AOrganization/>}/>
+          <Route path="admin/post" element = {<APost/>}/>
+          <Route path="admin/profile" element = {<AProfile/>}/>
+          <Route path="admin/urgentneed" element = {<AUrgentNeed/>}/>
+          <Route path ="admin/user" element={<AUser/>}/>
         </Routes>
       </div>
     </Router>
