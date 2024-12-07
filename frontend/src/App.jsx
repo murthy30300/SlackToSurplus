@@ -39,7 +39,7 @@ function App() {
           <Route path="/User/:username" element={<User />} />
           <Route path="/openai" element={<RecipieGenerator/>}/>
 
-          <Route path="/ro/login" element={<ROLogin />} />
+          {/* <Route path="/ro/login" element={<ROLogin />} /> */}
           <Route path="/ro/dashboard" element={<RODashboard />} />
           <Route path="/ro/impact" element={<ROImpact />} />
           <Route path="/ro/history" element={<ROHistory />} />

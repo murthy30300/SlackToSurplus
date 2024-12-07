@@ -109,7 +109,10 @@ function Donate() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const username = JSON.parse(localStorage.getItem("user"))?.user?.username;
+    const storedData = JSON.parse(
+      localStorage.getItem("user") || '{"user":{"uid":""}}'
+    );
+    const username = storedData.user.username;
     
     if (!username) {
       toast.error("Please log in to submit a donation");
@@ -117,6 +120,8 @@ function Donate() {
     }
 
     try {
+      console.log("Username:", username);
+
       const response = await axios.post("http://localhost:1987/foodOffers", {
         username,
         foodOffer: formData,
