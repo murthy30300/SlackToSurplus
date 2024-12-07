@@ -28,7 +28,7 @@ const ROBase = ({ children }) => {
   const handleLogout = () => {
     localStorage.removeItem('user');
     toast.success('Logged out successfully');
-    navigate('/ro/login');
+    navigate('/');
   };
 
   const sidebarVariants = {

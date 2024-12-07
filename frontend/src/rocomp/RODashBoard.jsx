@@ -46,12 +46,15 @@ const RODashboard = () => {
         requestDate: new Date().toISOString(),
       };
   
+      console.log('Requesting food with data:', requestData); // Debugging line
+  
       await axios.post(`http://localhost:1987/api/recipient/food-request`, requestData);
       toast.success('Request sent successfully!');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to send request');
     }
   };
+  
 
   const filteredDonations = donations.filter(donation =>
     donation.foodType?.toLowerCase().includes(searchTerm.toLowerCase()) ||

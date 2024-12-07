@@ -22,21 +22,64 @@ const Home = () => {
     { id: "organization", label: "Organization" },
     { id: "admin", label: "Admin" },
   ];
-
   const validateForm = () => {
     const newErrors = {};
+  
+    // Username validation
     if (!formValues.username || formValues.username.length < 3) {
       newErrors.username = "Username must be at least 3 characters";
     }
+  
+    // Email validation
     if (!formValues.email || !/\S+@\S+\.\S+/.test(formValues.email)) {
       newErrors.email = "Invalid email format";
     }
-    if (!formValues.password || formValues.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
+  
+    // Password validation
+    const password = formValues.password;
+    if (!password) {
+      newErrors.password = "Password is required";
+    } else {
+      // Minimum length check
+      if (password.length < 6) {
+        newErrors.password = "Password must be at least 6 characters long";
+      }
+      // Uppercase letter check
+      else if (!/[A-Z]/.test(password)) {
+        newErrors.password = "Password must contain at least one uppercase letter";
+      }
+      // Lowercase letter check
+      else if (!/[a-z]/.test(password)) {
+        newErrors.password = "Password must contain at least one lowercase letter";
+      }
+      // Special character check
+      else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+        newErrors.password = "Password must contain at least one special character";
+      }
+      // Number check
+      else if (!/\d/.test(password)) {
+        newErrors.password = "Password must contain at least one number";
+      }
     }
+  
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  
+  // const validateForm = () => {
+  //   const newErrors = {};
+  //   if (!formValues.username || formValues.username.length < 3) {
+  //     newErrors.username = "Username must be at least 3 characters";
+  //   }
+  //   if (!formValues.email || !/\S+@\S+\.\S+/.test(formValues.email)) {
+  //     newErrors.email = "Invalid email format";
+  //   }
+  //   if (!formValues.password || formValues.password.length < 6) {
+  //     newErrors.password = "Password must be at least 6 characters";
+  //   }
+  //   setErrors(newErrors);
+  //   return Object.keys(newErrors).length === 0;
+  // };
 
   const handleChange = (e) => {
     const { name, value } = e.target;

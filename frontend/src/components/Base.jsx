@@ -9,6 +9,26 @@ const Base = ({ children, toggleSection }) => {
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState(""); // Add searchQuery to state
   const [searchResults, setSearchResults] = useState([]); // Add searchResults to state
+  const articles = [
+    {
+      title: '10 Shocking Facts About Food Waste',
+      description: 'Learn about the global impact of food waste and how we can reduce it.',
+      link: '#',
+      image: 'https://res.cloudinary.com/dovvc3hvb/image/upload/v1733562245/bphfxqu0kpjdtkfjij1k.jpg'
+    },
+    {
+      title: 'How to Reduce Food Waste at Home',
+      description: 'Simple tips to help you cut down on food waste in your daily life.',
+      link: '#',
+      image: 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=100&h=100'
+    },
+    {
+      title: 'The Environmental Cost of Wasted Food',
+      description: 'Discover the hidden costs of food waste to the environment.',
+      link: '#',
+      image: 'https://images.unsplash.com/photo-1488558980948-81db7f6c239c?auto=format&fit=crop&w=100&h=100'
+    },
+  ];
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -72,10 +92,42 @@ const Base = ({ children, toggleSection }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex gap-8">
             <div className="flex-1">{children}</div>
-            <div className="hidden lg:block w-80 bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Articles</h2>
-              <p className="text-gray-600">SLACK TO SURPLUS</p>
+            <div className="hidden lg:block w-80 bg-[#EDE8DC] p-6 rounded-lg shadow-xl border-2 border-black">
+              <h2 className="text-xl font-bold text-black mb-6 border-b-2 border-black pb-2">
+                Latest Articles
+              </h2>
+              <div className="space-y-6 max-h-[600px] overflow-y-auto pr-2">
+                {articles.map((article, index) => (
+                  <div
+                    key={index}
+                    className="group bg-[#E7CCCC] rounded-lg p-4 border-2 border-black
+                      transform transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                  >
+                    <div className="flex gap-4">
+                      <img
+                        src={article.image}
+                        alt={article.title}
+                        className="w-16 h-16 rounded-lg object-cover"
+                      />
+                      <div>
+                        <h3 className="font-semibold text-black group-hover:text-[#A5B68D] transition-colors">
+                          {article.title}
+                        </h3>
+                        <p className="text-sm text-black/80 mt-1">{article.description}</p>
+                        <a
+                          href={article.link}
+                          className="text-sm text-black hover:text-[#A5B68D] mt-2 inline-block
+                            border-b border-transparent hover:border-[#A5B68D] transition-all duration-300"
+                        >
+                          Read more →
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
+         
           </div>
         </div>
       </div>

@@ -12,10 +12,7 @@ const ROHistory = () => {
   const [filter, setFilter] = useState('ALL');
   const [expandedId, setExpandedId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
- const storedData = JSON.parse(
-    localStorage.getItem("user") || '{"user":{"uid":""}}'
-  );
-                                
+  const storedData = JSON.parse(localStorage.getItem("user") || '{"user":{"uid":""}}');
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -47,27 +44,28 @@ const ROHistory = () => {
     { value: 'PENDING', label: 'Pending' },
     { value: 'CONFIRMED', label: 'Confirmed' },
     { value: 'COMPLETED', label: 'Completed' },
-    { value: 'CANCELLED', label: 'Cancelled' }
+    { value: 'CANCELLED', label: 'Cancelled' },
   ];
 
   const getStatusColor = (status) => {
     switch (status) {
       case 'COMPLETED':
-        return 'bg-[#4CE7A8] text-[#4A4A4A]';
+        return 'bg-green-100 text-green-800';
       case 'PENDING':
-        return 'bg-[#E78F6C] text-white';
+        return 'bg-yellow-100 text-yellow-800';
       case 'CONFIRMED':
-        return 'bg-[#4C6CE7] text-white';
+        return 'bg-blue-100 text-blue-800';
       case 'CANCELLED':
-        return 'bg-[#D32E28] text-white';
+        return 'bg-red-100 text-red-800';
       default:
-        return 'bg-[#F7EFEA] text-[#4A4A4A]';
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
-  const filteredRequests = requests.filter(request =>
-    request.foodOffer.foodType.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    request.foodOffer.description.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredRequests = requests.filter(
+    (request) =>
+      request.foodOffer.foodType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      request.foodOffer.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (loading) {
@@ -75,11 +73,11 @@ const ROHistory = () => {
       <ROBase>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
           {[...Array(6)].map((_, idx) => (
-            <div key={idx} className="bg-[#F7EFEA] p-6 rounded-xl">
-              <div className="h-4 bg-[#E7CCCC] rounded w-3/4 mb-4"></div>
-              <div className="h-4 bg-[#E7CCCC] rounded w-1/2 mb-4"></div>
-              <div className="h-20 bg-[#E7CCCC] rounded mb-4"></div>
-              <div className="h-8 bg-[#E7CCCC] rounded"></div>
+            <div key={idx} className="bg-gray-200 p-6 rounded-xl">
+              <div className="h-4 bg-gray-300 rounded w-3/4 mb-4"></div>
+              <div className="h-4 bg-gray-300 rounded w-1/2 mb-4"></div>
+              <div className="h-20 bg-gray-300 rounded mb-4"></div>
+              <div className="h-8 bg-gray-300 rounded"></div>
             </div>
           ))}
         </div>
@@ -91,8 +89,8 @@ const ROHistory = () => {
     <ROBase>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-[#4A4A4A] mb-6">Request History</h1>
-          
+          <h1 className="text-2xl font-bold text-gray-800 mb-6">Request History</h1>
+
           {/* Search and Filter Section */}
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <div className="relative flex-1">
@@ -101,11 +99,11 @@ const ROHistory = () => {
                 placeholder="Search requests..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-4 pr-10 py-3 bg-white border border-[#E7CCCC] rounded-xl focus:ring-2 focus:ring-[#4C6CE7] focus:border-transparent"
+                className="w-full pl-4 pr-10 py-3 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
-              <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#4A4A4A] w-5 h-5" />
+              <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
             </div>
-            
+
             <div className="flex flex-wrap gap-2">
               {filterButtons.map((btn) => (
                 <motion.button
@@ -115,8 +113,8 @@ const ROHistory = () => {
                   onClick={() => setFilter(btn.value)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     filter === btn.value
-                      ? 'bg-[#4C6CE7] text-white'
-                      : 'bg-[#F7EFEA] text-[#4A4A4A] hover:bg-[#F4D8D8]'
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
                   {btn.label}
@@ -129,7 +127,7 @@ const ROHistory = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-[#F4D8D8] text-[#D32E28] p-4 rounded-xl text-center"
+              className="bg-red-100 text-red-800 p-4 rounded-xl text-center"
             >
               {error}
             </motion.div>
@@ -143,34 +141,38 @@ const ROHistory = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className="bg-[#F7EFEA] rounded-xl shadow-lg overflow-hidden"
+                    className="bg-white border border-gray-300 rounded-xl shadow-lg overflow-hidden"
                   >
                     <div className="p-6">
                       <div className="flex justify-between items-start mb-4">
-                        <h3 className="font-medium text-[#4A4A4A]">
+                        <h3 className="font-semibold text-blue-600 text-lg">
                           {request.foodOffer.foodType}
                         </h3>
-                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(request.status)}`}>
+                        <span
+                          className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
+                            request.status
+                          )}`}
+                        >
                           {request.status}
                         </span>
                       </div>
 
-                      <p className="text-sm text-[#4A4A4A] mb-4 line-clamp-2">
+                      <p className="text-sm text-gray-700 mb-4 line-clamp-2">
                         {request.foodOffer.description}
                       </p>
 
                       <div className="space-y-3 mb-4">
-                        <div className="flex items-center text-sm text-[#4A4A4A]">
-                          <Package className="w-4 h-4 mr-2 text-[#4C6CE7]" />
+                        <div className="flex items-center text-sm text-gray-700">
+                          <Package className="w-4 h-4 mr-2 text-blue-500" />
                           <span>Quantity: {request.foodOffer.quantity}kg</span>
                         </div>
-                        <div className="flex items-center text-sm text-[#4A4A4A]">
-                          <Calendar className="w-4 h-4 mr-2 text-[#4C6CE7]" />
-                          <span>Request Date: {
-                            request.requestDate
+                        <div className="flex items-center text-sm text-gray-700">
+                          <Calendar className="w-4 h-4 mr-2 text-blue-500" />
+                          <span>Request Date: 
+                            {request.requestDate
                               ? new Date(Date.parse(request.requestDate)).toLocaleDateString()
-                              : 'N/A'
-                          }</span>
+                              : 'N/A'}
+                          </span>
                         </div>
                       </div>
 
@@ -178,7 +180,7 @@ const ROHistory = () => {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => setExpandedId(expandedId === request.id ? null : request.id)}
-                        className="w-full flex items-center justify-center text-[#4C6CE7] hover:text-[#E78F6C] transition-colors"
+                        className="w-full flex items-center justify-center text-blue-500 hover:text-blue-700 transition-colors"
                       >
                         {expandedId === request.id ? (
                           <>
@@ -200,15 +202,18 @@ const ROHistory = () => {
                             animate={{ height: 'auto', opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
                             transition={{ duration: 0.3 }}
-                            className="mt-4 pt-4 border-t border-[#E7CCCC]"
+                            className="mt-4 pt-4 border-t border-gray-300"
                           >
-                            <div className="space-y-2 text-sm text-[#4A4A4A]">
-                              <p><strong>Location:</strong> {request.foodOffer.location}</p>
-                              <p><strong>Status Updated:</strong> {
-                                request.statusUpdateTime
+                            <div className="space-y-2 text-sm text-gray-700">
+                              <p>
+                                <strong>Location:</strong> {request.foodOffer.location}
+                              </p>
+                              <p>
+                                <strong>Status Updated:</strong> 
+                                {request.statusUpdateTime
                                   ? new Date(Date.parse(request.statusUpdateTime)).toLocaleString()
-                                  : 'N/A'
-                              }</p>
+                                  : 'N/A'}
+                              </p>
                             </div>
                           </motion.div>
                         )}
@@ -224,9 +229,9 @@ const ROHistory = () => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center py-12 bg-[#F7EFEA] rounded-xl"
+              className="text-center py-12 bg-gray-100 rounded-xl"
             >
-              <p className="text-[#4A4A4A]">No requests found matching your criteria.</p>
+              <p className="text-gray-700">No requests found matching your criteria.</p>
             </motion.div>
           )}
         </div>

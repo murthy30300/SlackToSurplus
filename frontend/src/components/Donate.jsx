@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
+import Base from './Base'
 //wrap and ban not found
 
 const FOOD_TYPES = {
@@ -192,6 +193,7 @@ function Donate() {
   );
 
   return (
+    <Base>
     <div className="max-w-2xl mx-auto p-6">
       <Toaster position="top-right" />
       {renderBreadcrumb()}
@@ -425,6 +427,7 @@ function Donate() {
         </div>
       </div>
     </div>
+    </Base>
   );
 }
 

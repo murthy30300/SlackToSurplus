@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Base from './Base';
-import { Heart, MessageCircle, Share2, MoreHorizontal } from 'lucide-react';
+import { MessageCircle, Share2, MoreHorizontal } from 'lucide-react';
 
 const UserDash = () => {
   const navigate = useNavigate();
@@ -16,15 +16,7 @@ const UserDash = () => {
       try {
         setLoading(true);
         const response = await axios.get('http://localhost:1987/posts/home');
-        const postsWithLikeStatus = await Promise.all(
-          response.data.map(async (post) => {
-            const likeStatus = await axios.get(
-              `http://localhost:1987/posts/${post.pid}/likes/status?profileId=${storedData?.user?.profile?.prid}`
-            );
-            return { ...post, isLiked: likeStatus.data };
-          })
-        );
-        setPosts(postsWithLikeStatus);
+        setPosts(response.data);  // Just set the posts, no need for like data
       } catch (error) {
         console.error('Error fetching posts', error);
       } finally {
@@ -33,33 +25,6 @@ const UserDash = () => {
     };
     fetchPosts();
   }, []);
-
-  const handleLike = async (post) => {
-    try {
-      const profileId = storedData?.user?.profile?.prid;
-      if (!profileId) return;
-
-      if (post.isLiked) {
-        await axios.delete(`http://localhost:1987/posts/${post.pid}/like/${profileId}`);
-      } else {
-        await axios.post(`http://localhost:1987/posts/${post.pid}/like?profileId=${profileId}`);
-      }
-
-      setPosts(currentPosts =>
-        currentPosts.map(p =>
-          p.pid === post.pid
-            ? {
-                ...p,
-                likeCount: p.isLiked ? p.likeCount - 1 : p.likeCount + 1,
-                isLiked: !p.isLiked
-              }
-            : p
-        )
-      );
-    } catch (error) {
-      console.error('Error toggling like:', error);
-    }
-  };
 
   const handleProfileClick = (username) => {
     navigate(`/User/${username}`);
@@ -133,17 +98,13 @@ const UserDash = () => {
 
                     {/* Post Actions */}
                     <div className="flex items-center justify-between pt-4 border-t border-[#E7CCCC]">
-                      <button 
-                        onClick={() => handleLike(post)}
-                        className={`flex items-center space-x-2 transition-all duration-200 transform hover:scale-105 ${
-                          post.isLiked ? 'text-[#D32E28]' : 'text-[#4A4A4A] hover:text-[#D32E28]'
-                        }`}
-                      >
-                        <Heart 
-                          className={`w-6 h-6 ${post.isLiked ? 'fill-current' : ''}`}
-                          strokeWidth={post.isLiked ? 1.5 : 2}
-                        />
-                        <span className="font-medium">{post.likeCount}</span>
+                      <button className="flex items-center space-x-2 text-[#4A4A4A] hover:text-[#4C6CE7] transition-all duration-200">
+                        <MessageCircle className="w-6 h-6" />
+                        <span className="font-medium">{post.commentCount}</span>
+                      </button>
+                      <button className="flex items-center space-x-2 text-[#4A4A4A] hover:text-[#4C6CE7] transition-all duration-200">
+                        <Share2 className="w-6 h-6" />
+                        <span className="font-medium">{post.shareCount}</span>
                       </button>
                     </div>
                   </div>

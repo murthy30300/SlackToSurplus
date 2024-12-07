@@ -16,27 +16,27 @@ const ROProfile = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+  
     // Replace with actual organization ID
     const data = {
       orgId: 1, // Example: pass the required organization ID here
-      ...formData,
+      ...formData, // formData contains name, description, etc.
     };
   
     try {
+      // Send data as URL parameters using params
       const response = await axios.post(
         "http://localhost:1987/api/recipient/update",
-        null, // No body for URL-encoded request
-        {
-          params: data, // Send data as URL parameters
-        }
+        null, // No request body, just URL parameters
+        { params: data } // Send data as query parameters
       );
-      alert(response.data);
+      alert(response.data); // Show success message
     } catch (error) {
-      console.error("Error updating organization:", error);
+      console.error("Error updating organization:", error.response || error.message);
       alert("Failed to update organization details");
     }
   };
+  
   
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
