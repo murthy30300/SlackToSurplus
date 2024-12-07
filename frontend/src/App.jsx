@@ -16,6 +16,7 @@ import ROLogistics from './rocomp/ROLogistics';
 import ROCommunity from './rocomp/ROCommunity';
 import ROFoodRequests from './rocomp/ROFoodRequests';
 import ROProfile from './rocomp/ROProfile';
+import ROPayment from './rocomp/ROPayment'
 import RecipieGenerator from './components/RecipieGenerator';
 import AFoodOffer from './admin/AFoodOffer';
 import AOrganization from './admin/AOrganization';
@@ -51,6 +52,7 @@ function App() {
           <Route path ="ro/requests" element = {<ROFoodRequests/>}/>
           <Route path="ro/orgprofile" element = {<ROProfile/>}/>
           <Route path = "ro/story" element={<ROCommunity/>}/>
+          <Route path="ro/payment" element={<ROPayment/>}/>
 
           <Route path ="admin" element = {<ABase/>}/>
           <Route path="admin/foodoffer" element = {<AFoodOffer/>}/>

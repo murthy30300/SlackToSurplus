@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Home, Search, MessageCircle, HandCoins, PlusSquare, User as UserIcon, Settings, LogOut, Package } from 'lucide-react';
+import { Home, Search, MessageCircle, HandCoins, PlusSquare, User as UserIcon, Settings, LogOut, Package, Brain } from 'lucide-react';
 import axios from 'axios';
 
 const Base = ({ children, toggleSection }) => {
@@ -61,6 +61,7 @@ const Base = ({ children, toggleSection }) => {
         <PlusSquare className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => navigate('/Post')} />
         <Package className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => navigate('/Request')} />
         <UserIcon className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => navigate(`/User/${JSON.parse(localStorage.getItem('user')).user.username}`)} />
+        <Brain className="w-6 h-6 text-gray-700 hover:text-blue-600 cursor-pointer transition-colors" onClick={() => navigate('/openai')} />
       </div>
 
       {/* Main Content */}

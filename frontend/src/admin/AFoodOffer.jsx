@@ -12,7 +12,7 @@ const AFoodOffer = () => {
     foodType: "COOKED", // Default to the first enum value
     packagingType: "CONTAINER", // Default to the first enum value
     pickupInstructions: "",
-    perishable: false,
+    isPerishable: false,
     dietaryNotes: "",
     status: "",
     latitude: "",
@@ -59,15 +59,16 @@ const AFoodOffer = () => {
     }
   };
 
-  const deleteFoodOffer = async (id) => {
+  const deleteFoodOffer = async (foid) => {
     try {
-      await axios.delete(`http://localhost:1987/admin/foodOffer/${id}`);
+      await axios.delete(`http://localhost:1987/admin/foodOffer/${foid}`);
       alert("Food offer deleted successfully!");
       fetchFoodOffers();
     } catch (error) {
       console.error("Error deleting food offer:", error);
     }
   };
+  
 
   const resetForm = () => {
     setFormData({
@@ -78,14 +79,15 @@ const AFoodOffer = () => {
       foodType: "COOKED",
       packagingType: "CONTAINER",
       pickupInstructions: "",
-      perishable: false,
+      isPerishable: false,
       dietaryNotes: "",
       status: "",
       latitude: "",
       longitude: "",
     });
+    setEditId(null);
   };
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editId) {
@@ -96,10 +98,10 @@ const AFoodOffer = () => {
   };
 
   const handleEdit = (offer) => {
-    setEditId(offer.id);
+    setEditId(offer.foid);
     setFormData({ ...offer });
   };
-
+  
   useEffect(() => {
     fetchFoodOffers();
   }, []);

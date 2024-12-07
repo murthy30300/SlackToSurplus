@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Base from './Base'
 
-const RecipieGenerator = () => {
-  const [items, setItems] = useState([]);
+const RecipeGenerator = () => {
   const [currentItem, setCurrentItem] = useState("");
-  const [recipe, setRecipe] = useState("");
+  const [items, setItems] = useState([]);
+  const [recipe, setRecipe] = useState(null);
   const [error, setError] = useState("");
 
   const handleAddItem = () => {
-    if (currentItem.trim()) {
+    if (currentItem.trim() !== "") {
       setItems([...items, currentItem.trim()]);
-      setCurrentItem("");
+      setCurrentItem(""); // Reset input field
     }
   };
 
@@ -20,26 +21,32 @@ const RecipieGenerator = () => {
   };
 
   const handleGenerateRecipe = async () => {
-    if (items.length === 0) {
-      setError("Please add at least one ingredient.");
-      return;
-    }
-    setError("");
-    setRecipe("");
-
     try {
-      const response = await axios.post("http://localhost:1987/openai/recipes/generate", items, {
-        headers: {
-          "Content-Type": "application/json",
-        },
+      setError(""); // Clear any previous errors
+      setRecipe(null); // Reset recipe
+  
+      if (items.length === 0) {
+        setError("Please add some ingredients before generating a recipe.");
+        return;
+      }
+  
+      const response = await axios.post("http://localhost:1987/generate-recipe", {
+        ingredients: items,  // Pass the array of ingredients
       });
-      setRecipe(response.data);
+  
+      if (response.data.recipe) {
+        setRecipe(response.data.recipe);
+      } else {
+        setError("No recipe generated. Please try again.");
+      }
     } catch (err) {
-      setError(err.response?.data || "Failed to generate recipe.");
+      console.error("Error generating recipe:", err);
+      setError("Error generating recipe. Please try again.");
     }
   };
-
+  
   return (
+    <Base>
     <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
       <h1>Recipe Generator</h1>
       <div>
@@ -93,13 +100,21 @@ const RecipieGenerator = () => {
         </div>
       )}
       {recipe && (
-        <div style={{ marginTop: "20px", backgroundColor: "#f9f9f9", padding: "10px", borderRadius: "5px" }}>
+        <div
+          style={{
+            marginTop: "20px",
+            backgroundColor: "#f9f9f9",
+            padding: "10px",
+            borderRadius: "5px",
+          }}
+        >
           <h2>Generated Recipe</h2>
           <p>{recipe}</p>
         </div>
       )}
     </div>
+    </Base>
   );
 };
 
-export default RecipieGenerator;
+export default RecipeGenerator;

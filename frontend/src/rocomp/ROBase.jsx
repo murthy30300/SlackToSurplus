@@ -19,11 +19,12 @@ const ROBase = ({ children }) => {
     { path: '/ro/impact', icon: Heart, label: 'Impact Tracker' },
     { path: '/ro/history', icon: Clock, label: 'Request History' },
     { path: '/ro/urgent', icon: AlertCircle, label: 'Urgent Needs' },
-    { path: '/ro/logistics', icon: Truck, label: 'Logistics' },
+    // { path: '/ro/logistics', icon: Truck, label: 'Logistics' },
     { path: '/ro/distribution', icon: Calculator, label: 'Distribution Plan' },
     { path: '/ro/stories', icon: BookOpen, label: 'Success Stories' },
     { path: '/ro/community', icon: Users, label: 'Organization' },
     { path: '/ro/story', icon: Columns4, label: 'View Stories' }
+   
 
   ];
 

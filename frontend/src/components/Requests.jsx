@@ -14,20 +14,26 @@ function Requests() {
     const fetchRequests = async () => {
       setLoading(true);
       setError(null);
-
+  
       try {
         const response = await axios.get(`${API_BASE_URL}/requests/user/${storedData.user.uid}`);
-        setRequests(response.data);
+        const formattedRequests = response.data.map((request) => ({
+          id: request.rid,
+          foodOffer: request.foodOffer?.description || 'Unknown Offer',
+          requesterName: request.requester?.name || 'Unknown Requester',
+          status: request.status,
+        }));
+        setRequests(formattedRequests);
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to fetch requests');
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchRequests();
   }, [storedData.user.uid]);
-
+  
   const handleCancel = async (request) => {
     try {
       await axios.post(`${API_BASE_URL}/requests/${request.id}/cancel`);

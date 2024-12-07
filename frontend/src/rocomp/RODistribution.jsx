@@ -28,15 +28,29 @@ const RODistribution = () => {
       toast.error("Please enter a valid Request ID");
       return;
     }
-
+  
     setLoading(true);
     setError(null);
-
+  
     try {
       const response = await axios.get(
         `http://localhost:1987/api/recipient/distribution-plan?requestId=${requestId}`
       );
-      setPlan(response.data);
+      let { totalQuantity, estimatedServings, suggestedPortionSize, distributionTime } = response.data;
+  
+      // Calculate missing values if not provided
+      if (!suggestedPortionSize && totalQuantity && estimatedServings) {
+        suggestedPortionSize = (totalQuantity * 1000) / estimatedServings; // Convert kg to grams
+      }
+      if (!distributionTime) {
+        distributionTime = `Approx. ${Math.ceil(totalQuantity / 2)} hours`; // Example: 2kg/hour
+      }
+  
+      setPlan({
+        ...response.data,
+        suggestedPortionSize: suggestedPortionSize ? suggestedPortionSize.toFixed(2) : 'N/A',
+        distributionTime,
+      });
       toast.success("Distribution plan calculated successfully!");
     } catch (error) {
       setError('Failed to fetch distribution plan');
@@ -45,6 +59,7 @@ const RODistribution = () => {
       setLoading(false);
     }
   };
+  
 
   const copyToClipboard = () => {
     const text = `

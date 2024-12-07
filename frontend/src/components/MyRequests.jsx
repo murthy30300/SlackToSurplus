@@ -10,23 +10,23 @@ function MyRequests() {
   const storedData = JSON.parse(localStorage.getItem('user') || '{"user":{"uid":""}}');
   const API_BASE_URL = 'http://localhost:1987';
 
-  useEffect(() => {
-    const fetchMyRequests = async () => {
-      setLoading(true);
-      setError(null);
+ useEffect(() => {
+  const fetchMyRequests = async () => {
+    setLoading(true);
+    setError(null);
 
-      try {
-        const response = await axios.get(`${API_BASE_URL}/requests/user/${storedData.user.uid}`);
-        setRequests(response.data);
-      } catch (err) {
-        setError(err.response?.data?.message || 'Failed to fetch requests');
-      } finally {
-        setLoading(false);
-      }
-    };
+    try {
+      const response = await axios.get(`${API_BASE_URL}/requests/offer/${storedData.user.uid}`);
+      setRequests(response.data); // Assuming data includes requests on user’s offers
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to fetch requests');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchMyRequests();
-  }, [storedData.user.uid]);
+  fetchMyRequests();
+}, [storedData.user.uid]);
 
   const handleConfirm = async (request) => {
     try {
