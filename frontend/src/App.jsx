@@ -50,6 +50,7 @@ function App() {
           <Route path="ro/community" element = {<ROProfile/>}/>
           <Route path ="ro/requests" element = {<ROFoodRequests/>}/>
           <Route path="ro/orgprofile" element = {<ROProfile/>}/>
+          <Route path = "ro/story" element={<ROCommunity/>}/>
 
           <Route path ="admin" element = {<ABase/>}/>
           <Route path="admin/foodoffer" element = {<AFoodOffer/>}/>

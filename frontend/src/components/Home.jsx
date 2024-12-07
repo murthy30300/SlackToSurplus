@@ -66,21 +66,7 @@ const Home = () => {
     return Object.keys(newErrors).length === 0;
   };
   
-  // const validateForm = () => {
-  //   const newErrors = {};
-  //   if (!formValues.username || formValues.username.length < 3) {
-  //     newErrors.username = "Username must be at least 3 characters";
-  //   }
-  //   if (!formValues.email || !/\S+@\S+\.\S+/.test(formValues.email)) {
-  //     newErrors.email = "Invalid email format";
-  //   }
-  //   if (!formValues.password || formValues.password.length < 6) {
-  //     newErrors.password = "Password must be at least 6 characters";
-  //   }
-  //   setErrors(newErrors);
-  //   return Object.keys(newErrors).length === 0;
-  // };
-
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues((prevValues) => ({
@@ -109,13 +95,13 @@ const Home = () => {
         username: formValues.username,
         email: formValues.email,
         password: formValues.password,
-        userRole: userRoleMap[activeModule],
+        role: userRoleMap[activeModule],
       };
 
       console.log("Payload being sent:", payload);
 
       const response = await axios.post(endpoint, payload);
-
+      console.log('response data',response.data)
       if (response.status === 200) {
         toast.success("Signup successful! Please login.");
         setFormValues({ username: "", email: "", password: "" });

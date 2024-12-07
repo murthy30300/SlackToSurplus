@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Home, Heart, Clock, AlertCircle, Users, Settings, LogOut,
-  Truck, Calculator, BookOpen, ChevronLeft, ChevronRight, Menu
+  Truck, Calculator, BookOpen, ChevronLeft, ChevronRight, Menu, Columns4
 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -22,7 +22,9 @@ const ROBase = ({ children }) => {
     { path: '/ro/logistics', icon: Truck, label: 'Logistics' },
     { path: '/ro/distribution', icon: Calculator, label: 'Distribution Plan' },
     { path: '/ro/stories', icon: BookOpen, label: 'Success Stories' },
-    { path: '/ro/community', icon: Users, label: 'Community' }
+    { path: '/ro/community', icon: Users, label: 'Organization' },
+    { path: '/ro/story', icon: Columns4, label: 'View Stories' }
+
   ];
 
   const handleLogout = () => {
