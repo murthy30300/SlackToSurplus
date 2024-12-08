@@ -8,10 +8,10 @@ export const useLikes = (initialLikeCount = 0, initialIsLiked = false) => {
   const toggleLike = async (postId, profileId) => {
     try {
       if (isLiked) {
-        await axios.delete(`slacktosurplus.up.railway.app/posts/${postId}/like/${profileId}`);
+        await axios.delete(`https://slacktosurplus.up.railway.app/posts/${postId}/like/${profileId}`);
         setLikeCount(prev => prev - 1);
       } else {
-        await axios.post(`slacktosurplus.up.railway.app/posts/${postId}/like?profileId=${profileId}`);
+        await axios.post(`https://slacktosurplus.up.railway.app/posts/${postId}/like?profileId=${profileId}`);
         setLikeCount(prev => prev + 1);
       }
       setIsLiked(!isLiked);

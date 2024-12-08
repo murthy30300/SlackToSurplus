@@ -39,7 +39,7 @@ const ROUrgent = () => {
     setShowConfirmModal(false);
     setLoading(true);
     try {
-      const response = await axios.post('slacktosurplus.up.railway.app/api/recipient/urgent-need', {
+      const response = await axios.post('https://slacktosurplus.up.railway.app/api/recipient/urgent-need', {
         ...urgentNeed,
         organization: { uid: storedData.user.uid }
       });

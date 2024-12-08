@@ -123,7 +123,7 @@ function Donate() {
     try {
       console.log("Username:", username);
 
-      const response = await axios.post("slacktosurplus.up.railway.app/foodOffers", {
+      const response = await axios.post("https://slacktosurplus.up.railway.app/foodOffers", {
         username,
         foodOffer: formData,
       });

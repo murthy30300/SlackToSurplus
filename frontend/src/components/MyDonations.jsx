@@ -10,7 +10,7 @@ function MyDonations() {
   const storedData = JSON.parse(
     localStorage.getItem("user") || '{"user":{"uid":""}}'
   );
-  const API_BASE_URL = "slacktosurplus.up.railway.app";
+  const API_BASE_URL = "https://slacktosurplus.up.railway.app";
 
   useEffect(() => {
     const fetchMyDonations = async () => {

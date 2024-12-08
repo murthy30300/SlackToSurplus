@@ -49,7 +49,7 @@ const ROProfile = () => {
 
     try {
       const response = await axios.post(
-        "slacktosurplus.up.railway.app/api/recipient/update",
+        "https://slacktosurplus.up.railway.app/api/recipient/update",
         null, // No request body, just URL parameters
         { params: data } // Send data as query parameters
       );

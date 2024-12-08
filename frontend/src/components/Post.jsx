@@ -34,7 +34,7 @@ const Post = () => {
     formData.append('userId', storedData.user.uid);
 
     try {
-      await axios.post('slacktosurplus.up.railway.app/posts/create', formData, {
+      await axios.post('https://slacktosurplus.up.railway.app/posts/create', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setMessage('Post created successfully!');

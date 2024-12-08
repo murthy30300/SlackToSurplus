@@ -19,7 +19,7 @@ const ROFoodRequests = () => {
     const fetchDonations = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('slacktosurplus.up.railway.app/api/recipient/donations', {
+        const response = await axios.get('https://slacktosurplus.up.railway.app/api/recipient/donations', {
           params: filters
         });
         console.log('Fetched Donations:', response.data);
@@ -36,7 +36,7 @@ const ROFoodRequests = () => {
 
   const handleRequest = async (donationId) => {
     try {
-      await axios.post('slacktosurplus.up.railway.app/api/recipient/food-request', {
+      await axios.post('https://slacktosurplus.up.railway.app/api/recipient/food-request', {
         foodOfferId: donationId,
         recipientId: storedData.user.id,
         status: 'PENDING'

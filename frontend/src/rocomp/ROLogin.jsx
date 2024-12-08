@@ -16,7 +16,7 @@ const ROLogin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get('slacktosurplus.up.railway.app/login', {
+      const response = await axios.get('https://slacktosurplus.up.railway.app/login', {
         params: {
           username: user.username,
           password: user.password,
@@ -50,7 +50,7 @@ const ROLogin = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('slacktosurplus.up.railway.app/signup', user);
+      const response = await axios.post('https://slacktosurplus.up.railway.app/signup', user);
       if (response.status === 201) {
         setMessage('Signup successful');
         setUser({ username: '', email: '', password: '', role: 'ORGANIZATION' });

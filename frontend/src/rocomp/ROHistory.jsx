@@ -18,11 +18,11 @@ const ROHistory = () => {
     const fetchHistory = async () => {
       try {
         const response1 = await axios.get(
-          `slacktosurplus.up.railway.app/api/recipient/getorganizer?uid=${storedData.user.uid}`
+          `https://slacktosurplus.up.railway.app/api/recipient/getorganizer?uid=${storedData.user.uid}`
         );
         const organizerId = response1.data;
         const response = await axios.get(
-          `slacktosurplus.up.railway.app/api/recipient/request-history?organizationId=${organizerId}${
+          `https://slacktosurplus.up.railway.app/api/recipient/request-history?organizationId=${organizerId}${
             filter !== 'ALL' ? `&status=${filter}` : ''
           }`
         );

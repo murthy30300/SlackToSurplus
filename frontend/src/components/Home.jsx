@@ -89,8 +89,8 @@ const Home = () => {
 
       const endpoint =
         activeModule === "organization"
-          ? `${config.url}/signup`
-          : `${config.url}/signup`;
+          ? `https://slacktosurplus.up.railway.app/signup`
+          : `https://slacktosurplus.up.railway.app/signup`;
 
       const payload = {
         username: formValues.username,
@@ -125,8 +125,8 @@ const Home = () => {
     try {
       const endpoint =
         activeModule === "organization"
-          ? `${config.url}/login`
-          : `${config.url}/login`;
+          ? `https://slacktosurplus.up.railway.app/login`
+          : `https://slacktosurplus.up.railway.app/login`;
 
       const response = await axios.get(endpoint, {
         params: { username: formValues.username, password: formValues.password },
