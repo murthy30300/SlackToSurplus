@@ -14,7 +14,7 @@ const APost = () => {
   // Fetch all posts
   const fetchPosts = async () => {
     try {
-      const response = await axios.get('http://localhost:1987/admin/posts');
+      const response = await axios.get('slacktosurplus.up.railway.app/admin/posts');
       setPosts(response.data);
     } catch (error) {
       console.error('Error fetching posts:', error);
@@ -40,14 +40,14 @@ const APost = () => {
       if (editingPostId) {
         // Update existing post
         await axios.put(
-          `http://localhost:1987/admin/post/${editingPostId}`,
+          `slacktosurplus.up.railway.app/admin/post/${editingPostId}`,
           formData,
           { headers: { 'Content-Type': 'multipart/form-data' } }
         );
         toast.success('Post updated successfully!');
       } else {
         // Create a new post
-        await axios.post('http://localhost:1987/admin/post', formData, {
+        await axios.post('slacktosurplus.up.railway.app/admin/post', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
         toast.success('Post created successfully!');
@@ -69,7 +69,7 @@ const APost = () => {
   // Delete a post
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:1987/admin/post/${id}`);
+      await axios.delete(`slacktosurplus.up.railway.app/admin/post/${id}`);
       toast.success('Post deleted successfully!');
       fetchPosts();
     } catch (error) {

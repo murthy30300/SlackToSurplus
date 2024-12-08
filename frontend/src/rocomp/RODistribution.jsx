@@ -34,7 +34,7 @@ const RODistribution = () => {
   
     try {
       const response = await axios.get(
-        `http://localhost:1987/api/recipient/distribution-plan?requestId=${requestId}`
+        `slacktosurplus.up.railway.app/api/recipient/distribution-plan?requestId=${requestId}`
       );
       let { totalQuantity, estimatedServings, suggestedPortionSize, distributionTime } = response.data;
   

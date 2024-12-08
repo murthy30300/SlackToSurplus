@@ -30,7 +30,7 @@ const User = () => {
 
   const loadUserProfile = async () => {
     try {
-      const response = await axios.get(`http://localhost:1987/profile/search?username=${storedData.user.username}`);
+      const response = await axios.get(`slacktosurplus.up.railway.app/profile/search?username=${storedData.user.username}`);
       const profile = response.data;
       console.log(response.data)
       setProfileData(prev => ({
@@ -50,7 +50,7 @@ const User = () => {
 
   const loadUserPosts = async (userId) => {
     try {
-      const response = await axios.get(`http://localhost:1987/posts/user/${userId}`);
+      const response = await axios.get(`slacktosurplus.up.railway.app/posts/user/${userId}`);
       setPosts(response.data || []);
     } catch (error) {
       console.error('Error fetching posts:', error);
@@ -96,7 +96,7 @@ const User = () => {
     }
 
     try {
-      await axios.post('http://localhost:1987/profile/update', formData, {
+      await axios.post('slacktosurplus.up.railway.app/profile/update', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       

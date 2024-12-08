@@ -15,7 +15,7 @@ const UserDash = () => {
     const fetchPosts = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:1987/posts/home');
+        const response = await axios.get('slacktosurplus.up.railway.app/posts/home');
         setPosts(response.data);  // Just set the posts, no need for like data
       } catch (error) {
         console.error('Error fetching posts', error);

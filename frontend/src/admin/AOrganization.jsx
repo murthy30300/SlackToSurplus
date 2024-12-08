@@ -40,7 +40,7 @@ const AOrganization = () => {
   const fetchOrganizations = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:1987/admin/organizations");
+      const response = await axios.get("slacktosurplus.up.railway.app/admin/organizations");
       setOrganizations(response.data);
       setError(null);
     } catch (error) {
@@ -105,7 +105,7 @@ const AOrganization = () => {
   const addOrganization = async () => {
     try {
       console.log("Form Data:", formData);
-      await axios.post("http://localhost:1987/admin/organization", formData);
+      await axios.post("slacktosurplus.up.railway.app/admin/organization", formData);
       toast.success("Organization added successfully!");
       fetchOrganizations();
       resetForm();
@@ -117,7 +117,7 @@ const AOrganization = () => {
   const updateOrganization = async () => {
     try {
       await axios.put(
-        `http://localhost:1987/admin/organization/${editId}`,
+        `slacktosurplus.up.railway.app/admin/organization/${editId}`,
         formData
       );
       toast.success("Organization updated successfully!");
@@ -132,7 +132,7 @@ const AOrganization = () => {
     if (!window.confirm("Are you sure you want to delete this organization?")) return;
     
     try {
-      await axios.delete(`http://localhost:1987/admin/organization/${id}`);
+      await axios.delete(`slacktosurplus.up.railway.app/admin/organization/${id}`);
       toast.success("Organization deleted successfully!");
       fetchOrganizations();
     } catch (error) {

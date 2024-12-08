@@ -21,8 +21,8 @@ const RODashboard = () => {
     const fetchData = async () => {
       try {
         const [donationsRes, statsRes] = await Promise.all([
-          axios.get('http://localhost:1987/foodOffers'),
-          axios.get(`http://localhost:1987/api/recipient/stats?organizationId=${storedData.user.uid}`)
+          axios.get('slacktosurplus.up.railway.app/foodOffers'),
+          axios.get(`slacktosurplus.up.railway.app/api/recipient/stats?organizationId=${storedData.user.uid}`)
         ]);
 
         setDonations(donationsRes.data);
@@ -56,7 +56,7 @@ const RODashboard = () => {
 
       console.log('Requesting food with data:', requestData); // Debugging line
 
-      await axios.post(`http://localhost:1987/api/recipient/food-request`, requestData);
+      await axios.post(`slacktosurplus.up.railway.app/api/recipient/food-request`, requestData);
       toast.success('Request sent successfully!');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to send request');

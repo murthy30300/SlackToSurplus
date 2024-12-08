@@ -20,7 +20,7 @@ const ROStories = () => {
     const fetchOrganizationId = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:1987/api/recipient/getorganizer?uid=${storedData.user.uid}`
+          `slacktosurplus.up.railway.app/api/recipient/getorganizer?uid=${storedData.user.uid}`
         );
         console.log("Fetched Organization ID:", response.data);
         setOid(response.data);
@@ -67,7 +67,7 @@ const ROStories = () => {
       }
 
       await axios.post(
-        "http://localhost:1987/api/recipient/success-story",
+        "slacktosurplus.up.railway.app/api/recipient/success-story",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

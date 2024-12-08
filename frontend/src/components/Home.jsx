@@ -4,6 +4,7 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
+import config from '../config'
 
 const Home = () => {
   const [activeModule, setActiveModule] = useState("user");
@@ -88,8 +89,8 @@ const Home = () => {
 
       const endpoint =
         activeModule === "organization"
-          ? "http://localhost:1987/signup"
-          : "http://localhost:1987/signup";
+          ? `${config.url}/signup`
+          : `${config.url}/signup`;
 
       const payload = {
         username: formValues.username,
@@ -124,8 +125,8 @@ const Home = () => {
     try {
       const endpoint =
         activeModule === "organization"
-          ? "http://localhost:1987/login"
-          : "http://localhost:1987/login";
+          ? `${config.url}/login`
+          : `${config.url}/login`;
 
       const response = await axios.get(endpoint, {
         params: { username: formValues.username, password: formValues.password },

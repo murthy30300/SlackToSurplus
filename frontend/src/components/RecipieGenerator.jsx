@@ -30,7 +30,7 @@ const RecipeGenerator = () => {
         return;
       }
   
-      const response = await axios.post("http://localhost:1987/generate-recipe", {
+      const response = await axios.post("slacktosurplus.up.railway.app/generate-recipe", {
         ingredients: items,  // Pass the array of ingredients
       });
   

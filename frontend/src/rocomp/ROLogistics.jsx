@@ -14,7 +14,7 @@ const ROLogistics = () => {
 
       try {
         const user = JSON.parse(localStorage.getItem('roUser'));
-        const response = await axios.get('http://localhost:1987/api/recipient/logistics', {
+        const response = await axios.get('slacktosurplus.up.railway.app/api/recipient/logistics', {
           params: {
             donationId: selectedDonation,
             recipientId: user.id

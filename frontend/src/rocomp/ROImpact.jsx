@@ -12,7 +12,7 @@ const ROImpact = () => {
     const fetchStats = async () => {
       try {
         const u = JSON.parse(localStorage.getItem('user'));
-        const response = await axios.get(`http://localhost:1987/api/recipient/stats?organizationId=${storedData.user.uid}`);
+        const response = await axios.get(`slacktosurplus.up.railway.app/api/recipient/stats?organizationId=${storedData.user.uid}`);
         response.data;
         console.log('user id',storedData.user.uid)
         console.log('response data',response.data)
