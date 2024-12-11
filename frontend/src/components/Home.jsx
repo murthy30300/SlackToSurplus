@@ -172,6 +172,11 @@ const Home = () => {
           alt="Food Donation"
           className="w-full max-w-2xl rounded-2xl shadow-xl"
         />
+        <h3 className="bg-red-500 absolute top-0"> in the admin tab Username:admin password:Admin123@</h3>
+          <h3 className="bg-blue-300 absolute top-12">USER:- username: murthy30300 password:Murthy1702@</h3>
+          <h3 className="bg-white absolute top-15">ORGANIZATION: username:slacktosurplus  password: Slack@123</h3>
+          <h3 className="bg-green-400 absolute top-6">please don't refresh, the site it will be shown page not found: if it happens open the site again</h3>
+
       </div>
 
       <div className="flex-1 flex items-center justify-center p-8">
