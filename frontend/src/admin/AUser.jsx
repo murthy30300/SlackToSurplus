@@ -19,7 +19,7 @@ const AUser = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("https://https://slacktosurplus.up.railway.app/admin/users");
+      const response = await axios.get("http://localhost:1987/admin/users");
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -52,7 +52,7 @@ const AUser = () => {
 
   const handleSave = async () => {
     try {
-      await axios.put(`https://https://slacktosurplus.up.railway.app/admin/user/${editingUserId}`, formData);
+      await axios.put(`http://localhost:1987/admin/user/${editingUserId}`, formData);
       fetchUsers();
       handleCancelEdit();
     } catch (error) {
@@ -62,7 +62,7 @@ const AUser = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://https://slacktosurplus.up.railway.app/admin/user/${id}`);
+      await axios.delete(`https://localhost:1987/admin/user/${id}`);
       fetchUsers();
     } catch (error) {
       console.error("Error deleting user:", error);

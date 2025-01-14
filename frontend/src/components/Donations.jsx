@@ -7,7 +7,7 @@ function Donations() {
   const [donations, setDonations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const API_BASE_URL = 'slacktosurplus.up.railway.app';
+  const API_BASE_URL = 'http://localhost:1987';
 
   useEffect(() => {
     const fetchDonations = async () => {

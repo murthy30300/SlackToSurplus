@@ -4,7 +4,6 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
-import config from '../config'
 
 const Home = () => {
   const [activeModule, setActiveModule] = useState("user");
@@ -89,8 +88,8 @@ const Home = () => {
 
       const endpoint =
         activeModule === "organization"
-          ? `https://slacktosurplus.up.railway.app/signup`
-          : `https://slacktosurplus.up.railway.app/signup`;
+          ? `http://localhost:1987/signup`
+          : `http://localhost:1987/signup`;
 
       const payload = {
         username: formValues.username,
@@ -125,8 +124,8 @@ const Home = () => {
     try {
       const endpoint =
         activeModule === "organization"
-          ? `https://slacktosurplus.up.railway.app/login`
-          : `https://slacktosurplus.up.railway.app/login`;
+          ? `http://localhost:1987/login`
+          : `http://localhost:1987/login`;
 
       const response = await axios.get(endpoint, {
         params: { username: formValues.username, password: formValues.password },
@@ -162,8 +161,9 @@ const Home = () => {
   return (
     <div className="min-h-screen flex bg-[#F7EFEA]">
       <Toaster position="top-right" />
-
+     
       <div className="flex-1 flex items-center justify-center p-8">
+       
         <motion.img
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -172,6 +172,10 @@ const Home = () => {
           alt="Food Donation"
           className="w-full max-w-2xl rounded-2xl shadow-xl"
         />
+          {/* <h3 className="bg-red-500 absolute top-0"> in the admin tab Username:admin password:Admin123@</h3>
+          <h3 className="bg-blue-300 absolute top-21 bottom-3">USER:- username: murthy30300 password:Murthy1702@</h3>
+          <h3 className="bg-white absolute top-15">ORGANIZATION: username:slacktosurplus  password: Slack@123</h3>
+          <h3 className="bg-green-400 absolute top-6">please don't refresh, the site it will be shown page not found: if it happens open the site again and email dont required for LOGIN, </h3> */}
       </div>
 
       <div className="flex-1 flex items-center justify-center p-8">

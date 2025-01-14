@@ -17,7 +17,7 @@ const ROCommunity = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('https://slacktosurplus.up.railway.app/api/recipient/organization-stories');
+        const response = await axios.get('http://localhost:1987/api/recipient/organization-stories');
         if (Array.isArray(response.data)) {
           setPosts(response.data);
         } else {

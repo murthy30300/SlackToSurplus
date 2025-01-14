@@ -18,7 +18,7 @@ const AUrgentNeed = () => {
   // Fetch data
   const fetchUrgentNeeds = async () => {
     try {
-      const response = await axios.get("https://slacktosurplus.up.railway.app/admin/urgentNeeds");
+      const response = await axios.get("http://localhost:1987/admin/urgentNeeds");
       console.log(response.data)
       setUrgentNeeds(response.data);
       console.log('urgent needs***',urgentNeeds.urid)
@@ -36,9 +36,9 @@ const AUrgentNeed = () => {
     e.preventDefault();
     try {
       if (isEditing) {
-        await axios.put(`https://slacktosurplus.up.railway.app/admin/urgentNeed/${formData.urid}`, formData);
+        await axios.put(`http://localhost:1987/admin/urgentNeed/${formData.urid}`, formData);
       } else {
-        await axios.post("https://slacktosurplus.up.railway.app/admin/urgentNeed", formData);
+        await axios.post("http://localhost:1987/admin/urgentNeed", formData);
       }
       fetchUrgentNeeds();
       setFormData({
@@ -59,7 +59,7 @@ const AUrgentNeed = () => {
   // Handle delete
   const handleDelete = async (urid) => {
     try {
-      await axios.delete(`https://slacktosurplus.up.railway.app/admin/urgentNeed/${urid}`);
+      await axios.delete(`http://localhost:1987/admin/urgentNeed/${urid}`);
       fetchUrgentNeeds();
     } catch (error) {
       console.error("Error deleting urgent need:", error);

@@ -38,7 +38,7 @@ const ForgetPassword = () => {
     }
 
     try {
-      await axios.post('https://https://slacktosurplus.up.railway.app/api/auth/forget-password', { email });
+      await axios.post('https://localhost:1987/api/auth/forget-password', { email });
       toast.success('Reset token has been sent to your email');
       setStep(2);
     } catch (error) {
@@ -56,7 +56,7 @@ const ForgetPassword = () => {
     }
 
     try {
-      await axios.post('https://https://slacktosurplus.up.railway.app/api/auth/reset-password', { email, token, newPassword });
+      await axios.post('https://http://localhost:1987//api/auth/reset-password', { email, token, newPassword });
       toast.success('Password reset successful');
       navigate('/');
     } catch (error) {

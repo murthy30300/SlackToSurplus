@@ -8,7 +8,7 @@ function MyRequests() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const storedData = JSON.parse(localStorage.getItem('user') || '{"user":{"uid":""}}');
-  const API_BASE_URL = 'https://slacktosurplus.up.railway.app';
+  const API_BASE_URL = 'http://localhost:1987';
 
  useEffect(() => {
   const fetchMyRequests = async () => {
