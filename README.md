@@ -5,7 +5,7 @@ https://slacktosurplus.netlify.app/
 
 Welcome to **Slack To Surplus**, a food donation management system designed to turn surplus food into solutions for hunger. By connecting donors with recipients, we reduce food waste and promote food security—one donation at a time.
 
-![[Homepage Screenshot](https://res.cloudinary.com/dovvc3hvb/image/upload/v1742531892/photo_7_2025-03-21_10-05-37_nzq5cu.jpg)](insert-link-here)  
+![[Homepage Screenshot](https://res.cloudinary.com/dovvc3hvb/image/upload/v1742531892/photo_7_2025-03-21_10-05-37_nzq5cu.jpg)  
 *Caption: The homepage feed raises awareness about food waste and showcases active donation posts.*
 
 ---
