@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Base from './Base';
 import { Edit2, Upload } from 'lucide-react';
-
+import CONFIG from '../config';
 const User = () => {
   const storedData = JSON.parse(localStorage.getItem('user'));
   const [profileData, setProfileData] = useState({
@@ -30,7 +30,7 @@ const User = () => {
 
   const loadUserProfile = async () => {
     try {
-      const response = await axios.get(`http://localhost:1987/profile/search?username=${storedData.user.username}`);
+      const response = await axios.get(`${CONFIG.API_BASE_URL}/profile/search?username=${storedData.user.username}`);
       const profile = response.data;
       console.log(response.data)
       setProfileData(prev => ({
@@ -50,7 +50,7 @@ const User = () => {
 
   const loadUserPosts = async (userId) => {
     try {
-      const response = await axios.get(`http://localhost:1987/posts/user/${userId}`);
+      const response = await axios.get(`${CONFIG.API_BASE_URL}/posts/user/${userId}`);
       setPosts(response.data || []);
     } catch (error) {
       console.error('Error fetching posts:', error);
@@ -96,7 +96,7 @@ const User = () => {
     }
 
     try {
-      await axios.post('http://localhost:1987/profile/update', formData, {
+      await axios.post(`${CONFIG.API_BASE_URL}/profile/update`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       

@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, Calendar, Package, Filter, ChevronDown, ChevronUp } from 'lucide-react';
 import ROBase from './ROBase';
 import toast from 'react-hot-toast';
-
+import CONFIG from '.././config';
 const ROHistory = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,11 +18,11 @@ const ROHistory = () => {
     const fetchHistory = async () => {
       try {
         const response1 = await axios.get(
-          `http://localhost:1987/api/recipient/getorganizer?uid=${storedData.user.uid}`
+          `${CONFIG.API_BASE_URL}/api/recipient/getorganizer?uid=${storedData.user.uid}`
         );
         const organizerId = response1.data;
         const response = await axios.get(
-          `http://localhost:1987/api/recipient/request-history?organizationId=${organizerId}${
+          `${CONFIG.API_BASE_URL}/api/recipient/request-history?organizationId=${organizerId}${
             filter !== 'ALL' ? `&status=${filter}` : ''
           }`
         );

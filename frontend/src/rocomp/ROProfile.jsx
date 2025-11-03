@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ROBase from "./ROBase";
 import { useNavigate } from "react-router-dom";
-
+import CONFIG from ".././config"
 const ROProfile = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -49,7 +49,7 @@ const ROProfile = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:1987/api/recipient/update",
+        `${CONFIG.API_BASE_URL}/api/recipient/update`,
         null, // No request body, just URL parameters
         { params: data } // Send data as query parameters
       );

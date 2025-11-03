@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Loader2 } from 'lucide-react';
 import ROBase from './ROBase';
-
+import CONFIG from '.././config'
 const ROImpact = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -12,7 +12,7 @@ const ROImpact = () => {
     const fetchStats = async () => {
       try {
         const u = JSON.parse(localStorage.getItem('user'));
-        const response = await axios.get(`http://localhost:1987/api/recipient/stats?organizationId=${storedData.user.uid}`);
+        const response = await axios.get(`${CONFIG.API_BASE_URL}/api/recipient/stats?organizationId=${storedData.user.uid}`);
         response.data;
         console.log('user id',storedData.user.uid)
         console.log('response data',response.data)

@@ -4,7 +4,7 @@ import { AlertCircle, Calendar, Package, Type, FileText, Tag, Loader2 } from 'lu
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast, Toaster } from 'react-hot-toast';
 import ROBase from './ROBase';
-
+import CONFIG from '.././config';
 const ROUrgent = () => {
   const [urgentNeed, setUrgentNeed] = useState({
     title: '',
@@ -39,7 +39,7 @@ const ROUrgent = () => {
     setShowConfirmModal(false);
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:1987/api/recipient/urgent-need', {
+      const response = await axios.post(`${CONFIG.API_BASE_URL}/api/recipient/urgent-need`, {
         ...urgentNeed,
         organization: { uid: storedData.user.uid }
       });

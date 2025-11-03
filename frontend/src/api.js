@@ -55,9 +55,9 @@
 //   }
 // };
 import axios from 'axios';
-
+import CONFIG from "./config"
 // Set the base URL for your API (change this if your backend runs on a different URL)
-const API_URL = 'http://localhost:8080/api'; // Change this to your backend's URL
+const API_URL = `${CONFIG.API_BASE_URL}`; // Change this to your backend's URL
 
 // Create an axios instance with default configurations
 const api = axios.create({

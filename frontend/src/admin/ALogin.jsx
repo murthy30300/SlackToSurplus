@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, User } from 'lucide-react';
-
+import CONFIG from ".././config"
 const ALogin = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState({ username: '', email: '', password: '', role: 'ORGANIZATION' });
@@ -15,7 +15,7 @@ const ALogin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get('http://localhost:1987/login', {
+      const response = await axios.get(`${CONFIG.API_BASE_URL}/login`, {
         params: {
           username: user.username,
           password: user.password,

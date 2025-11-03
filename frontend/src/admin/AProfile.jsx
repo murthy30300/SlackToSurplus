@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ABase from './ABase'
-
+import CONFIG from "../config";
 const AProfile = () => {
   const [profiles, setProfiles] = useState([]);
   const [editingId, setEditingId] = useState(null);
@@ -30,7 +30,7 @@ const AProfile = () => {
 
   const fetchProfiles = async () => {
     try {
-      const response = await axios.get("http://localhost:1987/admin/profiles");
+      const response = await axios.get(`${CONFIG.API_BASE_URL}/admin/profiles`);
       console.log(response.data)
       setProfiles(response.data);
     } catch (error) {
@@ -52,7 +52,7 @@ const AProfile = () => {
     try {
       if (editingId) {
         // Update profile
-        await axios.put(`http://localhost:1987/admin/profile/${editingId}`, formData);
+        await axios.put(`${CONFIG.API_BASE_URL}/admin/profile/${editingId}`, formData);
       } else {
         // Add new profile
         await axios.post("/admin/profile", formData);
@@ -83,7 +83,7 @@ const AProfile = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:1987/admin/profile/${id}`);
+      await axios.delete(`${CONFIG.API_BASE_URL}/admin/profile/${id}`);
       fetchProfiles();
     } catch (error) {
       console.error("Error deleting profile:", error);

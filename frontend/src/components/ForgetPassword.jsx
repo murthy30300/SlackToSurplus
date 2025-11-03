@@ -4,7 +4,7 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import { Mail, Lock, ArrowLeft } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
-
+import CONFIG from '../config';
 const ForgetPassword = () => {
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
@@ -38,7 +38,7 @@ const ForgetPassword = () => {
     }
 
     try {
-      await axios.post('http://localhost:1987/api/auth/forget-password', { email });
+      await axios.post(`${CONFIG.API_BASE_URL}/api/auth/forget-password`, { email });
       toast.success('Reset token has been sent to your email');
       setStep(2);
     } catch (error) {
@@ -56,7 +56,7 @@ const ForgetPassword = () => {
     }
 
     try {
-      await axios.post('http://localhost:1987/api/auth/reset-password', { email, token, newPassword });
+      await axios.post(`${CONFIG.API_BASE_URL}/api/auth/reset-password`, { email, token, newPassword });
       toast.success('Password reset successful');
       navigate('/');
     } catch (error) {

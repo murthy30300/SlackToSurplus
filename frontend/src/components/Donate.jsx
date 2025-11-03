@@ -13,6 +13,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import Base from './Base'
 //wrap and ban not found
+import CONFIG from "../config";
 
 const FOOD_TYPES = {
   COOKED: { label: "Cooked", icon: <Utensils className="w-6 h-6" /> },
@@ -123,7 +124,7 @@ function Donate() {
     try {
       console.log("Username:", username);
 
-      const response = await axios.post("http://localhost:1987/foodOffers", {
+      const response = await axios.post(`${CONFIG.API_BASE_URL}/foodOffers`, {
         username,
         foodOffer: formData,
       });

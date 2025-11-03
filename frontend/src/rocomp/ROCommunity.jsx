@@ -5,7 +5,7 @@ import { Search, Loader2, Heart, MessageCircle, Share2, ChevronRight, Filter } f
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { toast, Toaster } from 'react-hot-toast';
 import ROBase from './ROBase';
-
+import CONFIG from '.././config';
 const ROCommunity = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,7 +17,7 @@ const ROCommunity = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://localhost:1987/api/recipient/organization-stories');
+        const response = await axios.get(`${CONFIG.API_BASE_URL}/api/recipient/organization-stories`);
         if (Array.isArray(response.data)) {
           setPosts(response.data);
         } else {

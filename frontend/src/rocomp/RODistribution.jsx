@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Calculator, Loader2, Copy, RefreshCw, ChevronRight, AlertCircle } from 'lucide-react';
 import { toast, Toaster } from 'react-hot-toast';
 import ROBase from './ROBase';
-
+import CONFIG from '.././config';
 const RODistribution = () => {
   const [requestId, setRequestId] = useState('');
   const [plan, setPlan] = useState(null);
@@ -34,7 +34,7 @@ const RODistribution = () => {
   
     try {
       const response = await axios.get(
-        `http://localhost:1987/api/recipient/distribution-plan?requestId=${requestId}`
+        `${CONFIG.API_BASE_URL}/api/recipient/distribution-plan?requestId=${requestId}`
       );
       let { totalQuantity, estimatedServings, suggestedPortionSize, distributionTime } = response.data;
   

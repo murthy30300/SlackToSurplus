@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import DonationCard from "./DonationCard";
 import { Loader2 } from "lucide-react";
-
+import CONFIG from "../config";
 function MyDonations() {
   const [myDonations, setMyDonations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,7 +10,7 @@ function MyDonations() {
   const storedData = JSON.parse(
     localStorage.getItem("user") || '{"user":{"uid":""}}'
   );
-  const API_BASE_URL = "http://localhost:1987";
+  const API_BASE_URL = `${CONFIG.API_BASE_URL}`;
 
   useEffect(() => {
     const fetchMyDonations = async () => {

@@ -6,7 +6,7 @@ import ReactPaginate from 'react-paginate';
 import debounce from 'lodash.debounce';
 import { FixedSizeList as List } from 'react-window';
 import ABase from './ABase'
-
+import CONFIG from '.././config'
 const AOrganization = () => {
   const [organizations, setOrganizations] = useState([]);
   const [editId, setEditId] = useState(null);
@@ -40,7 +40,7 @@ const AOrganization = () => {
   const fetchOrganizations = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:1987/admin/organizations");
+      const response = await axios.get(`${CONFIG.API_BASE_URL}/admin/organizations`);
       setOrganizations(response.data);
       setError(null);
     } catch (error) {
@@ -105,7 +105,7 @@ const AOrganization = () => {
   const addOrganization = async () => {
     try {
       console.log("Form Data:", formData);
-      await axios.post("http://localhost:1987/admin/organization", formData);
+      await axios.post(`${CONFIG.API_BASE_URL}/admin/organization`, formData);
       toast.success("Organization added successfully!");
       fetchOrganizations();
       resetForm();
@@ -117,7 +117,7 @@ const AOrganization = () => {
   const updateOrganization = async () => {
     try {
       await axios.put(
-        `http://localhost:1987/admin/organization/${editId}`,
+        `${CONFIG.API_BASE_URL}/admin/organization/${editId}`,
         formData
       );
       toast.success("Organization updated successfully!");
@@ -132,7 +132,7 @@ const AOrganization = () => {
     if (!window.confirm("Are you sure you want to delete this organization?")) return;
     
     try {
-      await axios.delete(`http://localhost:1987/admin/organization/${id}`);
+      await axios.delete(`${CONFIG.API_BASE_URL}/admin/organization/${id}`);
       toast.success("Organization deleted successfully!");
       fetchOrganizations();
     } catch (error) {

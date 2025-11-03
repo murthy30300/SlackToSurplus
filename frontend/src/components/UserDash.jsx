@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Base from './Base';
 import { MessageCircle, Share2, MoreHorizontal } from 'lucide-react';
-
+import CONFIG from '../config';
 const UserDash = () => {
   const navigate = useNavigate();
   const [currentSection, setCurrentSection] = useState('hunger');
@@ -15,7 +15,7 @@ const UserDash = () => {
     const fetchPosts = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:1987/posts/home');
+        const response = await axios.get(`${CONFIG.API_BASE_URL}/posts/home`);
         setPosts(response.data);  // Just set the posts, no need for like data
       } catch (error) {
         console.error('Error fetching posts', error);

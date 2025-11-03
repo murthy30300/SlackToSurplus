@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Truck, MapPin, Phone } from 'lucide-react';
 import ROBase from './ROBase';
-
+import CONFIG from '.././config';
 const ROLogistics = () => {
   const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,7 +14,7 @@ const ROLogistics = () => {
 
       try {
         const user = JSON.parse(localStorage.getItem('roUser'));
-        const response = await axios.get('http://localhost:1987/api/recipient/logistics', {
+        const response = await axios.get(`${CONFIG.API_BASE_URL}/api/recipient/logistics`, {
           params: {
             donationId: selectedDonation,
             recipientId: user.id

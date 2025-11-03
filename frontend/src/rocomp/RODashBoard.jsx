@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, Package, Users, Clock, Search, AlertTriangle } from 'lucide-react';
 import ROBase from './ROBase';
 import toast from 'react-hot-toast';
-
+import CONFIG from '.././config';
 const RODashboard = () => {
   const [donations, setDonations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,8 +21,8 @@ const RODashboard = () => {
     const fetchData = async () => {
       try {
         const [donationsRes, statsRes] = await Promise.all([
-          axios.get('http://localhost:1987/foodOffers'),
-          axios.get(`http://localhost:1987/api/recipient/stats?organizationId=${storedData.user.uid}`)
+          axios.get(`${CONFIG.API_BASE_URL}/foodOffers`),
+          axios.get(`${CONFIG.API_BASE_URL}/api/recipient/stats?organizationId=${storedData.user.uid}`)
         ]);
 
         setDonations(donationsRes.data);

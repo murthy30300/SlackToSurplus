@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Base from './Base'
-
+import CONFIG from "../config";
 const RecipeGenerator = () => {
   const [currentItem, setCurrentItem] = useState("");
   const [items, setItems] = useState([]);
@@ -30,7 +30,7 @@ const RecipeGenerator = () => {
         return;
       }
   
-      const response = await axios.post("http://localhost:1987/generate-recipe", {
+      const response = await axios.post(`${CONFIG.API_BASE_URL}/generate-recipe`, {
         ingredients: items,  // Pass the array of ingredients
       });
   

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ABase from './ABase'
+import CONFIG from "../config";
 const AFoodOffer = () => {
   const [foodOffers, setFoodOffers] = useState([]);
   const [editId, setEditId] = useState(null);
@@ -21,7 +22,7 @@ const AFoodOffer = () => {
 
   const fetchFoodOffers = async () => {
     try {
-      const response = await axios.get("http://localhost:1987/admin/foodOffers");
+      const response = await axios.get(`${CONFIG.API_BASE_URL}/admin/foodOffers`);
       setFoodOffers(response.data);
     } catch (error) {
       console.error("Error fetching food offers:", error);
@@ -38,7 +39,7 @@ const AFoodOffer = () => {
 
   const addFoodOffer = async () => {
     try {
-      await axios.post("http://localhost:1987/admin/foodOffer", formData);
+      await axios.post(`${CONFIG.API_BASE_URL}/admin/foodOffer`, formData);
       alert("Food offer added successfully!");
       fetchFoodOffers();
       resetForm();
@@ -49,7 +50,7 @@ const AFoodOffer = () => {
 
   const updateFoodOffer = async () => {
     try {
-      await axios.put(`http://localhost:1987/admin/foodOffer/${editId}`, formData);
+      await axios.put(`${CONFIG.API_BASE_URL}/admin/foodOffer/${editId}`, formData);
       alert("Food offer updated successfully!");
       fetchFoodOffers();
       setEditId(null);
@@ -61,7 +62,7 @@ const AFoodOffer = () => {
 
   const deleteFoodOffer = async (foid) => {
     try {
-      await axios.delete(`http://localhost:1987/admin/foodOffer/${foid}`);
+      await axios.delete(`${CONFIG.API_BASE_URL}/admin/foodOffer/${foid}`);
       alert("Food offer deleted successfully!");
       fetchFoodOffers();
     } catch (error) {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, User } from 'lucide-react';
-
+import CONFIG from '.././config'
 const ROLogin = () => {
   const [isLogin, setIsLogin] = useState(false);
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const ROLogin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get('http://localhost:1987/login', {
+      const response = await axios.get(`${CONFIG.API_BASE_URL}login`, {
         params: {
           username: user.username,
           password: user.password,
@@ -50,7 +50,7 @@ const ROLogin = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:1987/signup', user);
+      const response = await axios.post(`${CONFIG.API_BASE_URL}/signup`, user);
       if (response.status === 201) {
         setMessage('Signup successful');
         setUser({ username: '', email: '', password: '', role: 'ORGANIZATION' });

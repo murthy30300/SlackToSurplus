@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Image, Loader2 } from "lucide-react";
 import ROBase from "./ROBase";
-
+import CONFIG from ".././config";
 const ROStories = () => {
   const [story, setStory] = useState({
     content: "",
@@ -20,7 +20,7 @@ const ROStories = () => {
     const fetchOrganizationId = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:1987/api/recipient/getorganizer?uid=${storedData.user.uid}`
+          `${CONFIG.API_BASE_URL}/api/recipient/getorganizer?uid=${storedData.user.uid}`
         );
         console.log("Fetched Organization ID:", response.data);
         setOid(response.data);
@@ -67,7 +67,7 @@ const ROStories = () => {
       }
 
       await axios.post(
-        "http://localhost:1987/api/recipient/success-story",
+        `${CONFIG.API_BASE_URL}/api/recipient/success-story`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

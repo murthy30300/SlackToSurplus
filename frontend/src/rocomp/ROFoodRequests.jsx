@@ -4,7 +4,7 @@ import { Filter, MapPin } from 'lucide-react';
 import ROBase from './ROBase';
 import RequestCard from './cards/RequestCard';
 import FilterPanel from './cards/FilterPanel';
-
+import CONFIG from '.././config';
 const ROFoodRequests = () => {
   const [donations, setDonations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,7 +19,7 @@ const ROFoodRequests = () => {
     const fetchDonations = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:1987/api/recipient/donations', {
+        const response = await axios.get(`${CONFIG.API_BASE_URL}/api/recipient/donations`, {
           params: filters
         });
         console.log('Fetched Donations:', response.data);

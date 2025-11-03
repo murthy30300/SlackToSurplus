@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ABase from './ABase'
+import CONFIG from ".././config"
 
 const AUser = () => {
   const [users, setUsers] = useState([]);
@@ -19,7 +20,7 @@ const AUser = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:1987/admin/users");
+      const response = await axios.get(`${CONFIG.API_BASE_URL}/admin/users`);
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);

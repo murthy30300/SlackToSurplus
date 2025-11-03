@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Home, Search, MessageCircle, HandCoins, PlusSquare, User as UserIcon, Settings, LogOut, Package, Brain } from 'lucide-react';
 import axios from 'axios';
-
+import CONFIG from ".././config"
 const Base = ({ children, toggleSection }) => {
   const navigate = useNavigate();
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
@@ -33,7 +33,7 @@ const Base = ({ children, toggleSection }) => {
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get(`http://localhost:1987/profile/search?username=${searchQuery}`);
+      const response = await axios.get(`${CONFIG.API_BASE_URL}/profile/search?username=${searchQuery}`);
       setSearchResults(response.data ? [response.data] : []); // Ensure results are in an array
     } catch (error) {
       console.error('Error searching users:', error);

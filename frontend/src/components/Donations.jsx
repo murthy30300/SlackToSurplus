@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import DonationCard from './DonationCard';
 import { Loader2 } from 'lucide-react';
-
+import CONFIG from '../config';
 function Donations() {
   const [donations, setDonations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const API_BASE_URL = 'http://localhost:1987';
+  // const API_BASE_URL = 'http://localhost:1987';
 
   useEffect(() => {
     const fetchDonations = async () => {
@@ -15,7 +15,7 @@ function Donations() {
       setError(null);
 
       try {
-        const response = await axios.get(`${API_BASE_URL}/foodOffers`);
+        const response = await axios.get(`${CONFIG.API_BASE_URL}/foodOffers`);
         setDonations(response.data);
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to fetch donations');
@@ -30,7 +30,7 @@ function Donations() {
   const handleRequest = async (donation) => {
     try {
       await axios.post(
-        `${API_BASE_URL}/requests/create?offerId=${donation.foid}&requesterId=${JSON.parse(localStorage.getItem('user')).user.uid}`
+        `${CONFIG.API_BASE_URL}/requests/create?offerId=${donation.foid}&requesterId=${JSON.parse(localStorage.getItem('user')).user.uid}`
       );
       alert('Request sent successfully!');
     } catch (err) {

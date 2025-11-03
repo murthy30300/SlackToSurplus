@@ -6,7 +6,7 @@ import {
   Truck, Calculator, BookOpen, ChevronLeft, ChevronRight, Menu, Columns4
 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
-
+import CONFIG from ".././config"
 const ROBase = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();

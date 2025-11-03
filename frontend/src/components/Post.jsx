@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Base from './Base';
 import { Image, X } from 'lucide-react';
-
+import CONFIG from '../config';
 const Post = () => {
   const [post, setPost] = useState({ caption: '', media: null });
   const [message, setMessage] = useState('');
@@ -34,7 +34,7 @@ const Post = () => {
     formData.append('userId', storedData.user.uid);
 
     try {
-      await axios.post('http://localhost:1987/posts/create', formData, {
+      await axios.post(`${CONFIG.API_BASE_URL}/posts/create`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setMessage('Post created successfully!');
