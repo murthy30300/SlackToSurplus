@@ -12,6 +12,10 @@ phases:
       - echo "Building Vite app..."
       - npm run build
       - echo "Build completed successfully!"
+  post_build:
+    commands:
+      - echo "Making all files public..."
+      - aws s3 sync dist s3://s2s-frontend-1702 --acl public-read --delete
 
 artifacts:
   base-directory: frontend/dist
