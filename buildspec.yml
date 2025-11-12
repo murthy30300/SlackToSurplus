@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     commands:
-      - echo "Installing dependencies in frontend..."
+      - echo "Installing frontend dependencies..."
       - cd frontend
       - npm ci
 
@@ -11,7 +11,7 @@ phases:
     commands:
       - echo "Building Vite app..."
       - npm run build
-      - echo "Build done!"
+      - echo "Build completed successfully!"
 
 artifacts:
   base-directory: frontend/dist
