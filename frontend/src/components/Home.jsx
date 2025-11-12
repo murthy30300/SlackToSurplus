@@ -246,7 +246,7 @@ const Home = () => {
 
               <div>
                 <label className="block text-sm font-medium text-[#4A4A4A] mb-2">
-                  Password
+                 Enter Password
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#4A4A4A] w-5 h-5" />
