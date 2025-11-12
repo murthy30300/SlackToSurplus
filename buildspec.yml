@@ -1,0 +1,23 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Installing dependencies in frontend..."
+      - cd frontend
+      - npm ci
+
+  build:
+    commands:
+      - echo "Building Vite app..."
+      - npm run build
+      - echo "Build done!"
+
+artifacts:
+  base-directory: frontend/dist
+  files:
+    - '**/*'
+
+cache:
+  paths:
+    - frontend/node_modules/**/*
