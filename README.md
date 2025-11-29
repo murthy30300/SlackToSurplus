@@ -3,7 +3,7 @@
 
 # DEPLOYED LINK (Elastic Bean Stalk, S3, CICD, AIVEN, EC2) #
 http://s2s-frontend-1702.s3-website-us-east-1.amazonaws.com/
-![Link](http://s2s-frontend-1702.s3-website-us-east-1.amazonaws.com/)
+[Link](http://s2s-frontend-1702.s3-website-us-east-1.amazonaws.com/)
 
 Welcome to **Slack To Surplus**, a food donation management system designed to turn surplus food into solutions for hunger. By connecting donors with recipients, we reduce food waste and promote food security—one donation at a time.
 
